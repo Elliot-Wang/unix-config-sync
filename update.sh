@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # fetch remote
-# ...
-echo Please manual fetch updated commits from remote
+git pull
 echo Is updated?[y/N]
 read opt
 
