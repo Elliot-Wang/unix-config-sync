@@ -5,40 +5,34 @@
 set nocompatible
 set nobackup
 set noswapfile
+
 set history=1024
 set wildmenu
 set autochdir
 set whichwrap=b,s,<,>,[,]
-set nobomb
-set ignorecase
-set smartcase
-set hlsearch
-set incsearch
+" 搜索默认配置
+set hl is ic scs 
+
 set backspace=indent,eol,start
 set foldmethod=marker
-set noshowcmd
+set encoding=utf-8 nobomb
+
 filetype on
 syntax on
 "}}}
-
-
-" Lang & Encoding
-"{{{
-set encoding=utf-8
-set langmenu=zh_CN
-"}}}
-
 
 " GUI
 "{{{
 colo desert
 
-set cursorline
-set number
-set relativenumber
+" 行号，标尺
+set nu rnu cul
 set scrolloff=5
 hi clear LineNr
 hi ColorColumn guibg=grey
+
+set noshowcmd
+set langmenu=zh_CN
 
 " 不同模式下的光标样式
 " unix 环境下不需要
@@ -50,15 +44,12 @@ hi ColorColumn guibg=grey
 
 " Format Indent
 "{{{
-set autoindent
-set smartindent
-set ts=4            "tabstop 缩写
-set expandtab       "tab转空格
-set tabstop=4       "tab键
-set softtabstop=4   "tab键，大于tabstop，除余部分自动转空格
-set shiftwidth=4    ">>操作
+" 自动添加缩进量, 智能添加缩进量
+set ai si
+" 缩进四，tab转空格
+set ts=4 sts=4 sw=4 et
 
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
 "}}}
  
 
@@ -150,12 +141,17 @@ vnoremap s y:s/<C-R>"//g<left><left>
 vnoremap S y:%s/<C-R>"//g<left><left>
 
 " Cancel highlight
-noremap <leader><leader> :set hlsearch!<CR>
+noremap <leader>nl :set nohl<CR>
+" Set no number, ready for copy
+noremap <leader>no :set nornu nonu<CR>
+" Set number
+noremap <leader>nu :set rnu nu<CR>
 
 " Buffers
 "{{{
 noremap th :bp!<CR>
 noremap tl :bn!<CR>
+noremap td :bd<CR>
 "}}}
 "
 " Execute and Run
