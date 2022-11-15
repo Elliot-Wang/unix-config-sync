@@ -171,14 +171,14 @@ func! CompileRunGcc()
         exec "!time ./%<"
     elseif &filetype == 'cpp'
         exec "!g++ -std=c++11 % -Wall -o %<"
-        :term ./%<
+        term ./%<
         :winc J
         :res -15
     elseif &filetype == 'java'
         exec "!javac %"
         exec "!time java %<"
     elseif &filetype == 'python'
-        :term python3 %
+        term python3 %
         :winc J
         :res -15
     elseif &filetype == 'html'
@@ -186,11 +186,11 @@ func! CompileRunGcc()
     elseif &filetype == 'markdown'
         exec "MarkdownPreview"
     elseif &filetype == 'javascript'
-        :term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
+        term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
         :winc J
         :res -15
     elseif &filetype == 'go'
-        :term go run .
+        term go run .
         :winc J
         :res -15
     elseif &filetype == 'vim'
