@@ -41,9 +41,9 @@ hi clear LineNr
 hi ColorColumn guibg=grey
 
 " 不同模式下的光标样式
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+" let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+" let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 "}}}
 
 
@@ -56,6 +56,8 @@ set expandtab       "tab转空格
 set tabstop=4       "tab键
 set softtabstop=4   "tab键，大于tabstop，除余部分自动转空格
 set shiftwidth=4    ">>操作
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 "}}}
  
 
@@ -211,6 +213,7 @@ Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-surround'
+" Plug 'guns/xterm-color-table.vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""
