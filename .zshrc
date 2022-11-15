@@ -22,18 +22,21 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen apply
 
 # custom config
-for i in ~/.zsh/*.zsh ; do
-    if [ -r "$i" ]; then
-        . "$i"
-    fi
-done
-if [ -e /usr/share/terminfo/x/xterm-256color ]; then
+# 没有匹配项的时候会报错，先注释掉
+# for i in ~/.zsh/*.zsh ; do
+#     if [ -r "$i" ]; then
+#         . "$i"
+#     fi
+# done
+
+if [ $TERM = 'xterm' ] && [ -e /usr/share/terminfo/x/xterm-256color ]; then
     export TERM='xterm-256color'
-else
-    export TERM='xterm-color'
+elif [ $TERM = 'screen' ] && [ -e /usr/share/terminfo/s/screen-256color ]; then
+    export TERM='screen-256color'
+elif [ $TERM = 'tmux' ] && [ -e /usr/share/terminfo/t/tmux-256color ]; then
+    export TERM='tmux-256color'
 fi
 
 # My Config
 alias neo="neofetch"
-
 neofetch
