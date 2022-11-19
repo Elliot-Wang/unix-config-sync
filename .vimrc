@@ -11,7 +11,7 @@ set wildmenu
 set autochdir
 set whichwrap=b,s,<,>,[,]
 " 搜索默认配置
-set hl is ic scs 
+set hls is ic scs 
 
 set backspace=indent,eol,start
 set foldmethod=marker
