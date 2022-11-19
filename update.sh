@@ -2,14 +2,14 @@
 
 # fetch remote
 git pull
-echo Is updated?[y/N]
+echo Want to update configs? [y/N]
 read opt
 
 case $opt in
   y|Y)
     ;;
   *)
-    echo quit
+    echo Quit.
     exit 1
     ;;
 esac
