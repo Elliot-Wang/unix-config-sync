@@ -6,18 +6,18 @@ test -f /etc/redhat-release && os_name="redhat"
 test -f /etc/debian_version && os_name="debian"
 
 # vim篇
-if ! which vim; then
+if ! which vim > /etc/null; then
     echo "No Vim installed..."
     case $os_name in
       redhat)
         sudo yum install -y vim
         ;;
-     debian)
-       sudo apt install vim
-       ;;
-     unkown)
-       echo Unkown Os
-       ;;
+      debian)
+        sudo apt install vim
+        ;;
+      unkown)
+        echo Unkown Os
+        ;;
     esac
 fi
 # 使用vim-plug管理插件
@@ -25,21 +25,42 @@ fi
 cp .vimrc ~/.vimrc
 
 # zsh篇
-if ! which zsh; then
+if ! which zsh > /etc/null; then
     echo "No zsh installed..."
     case $os_name in
       redhat)
-        sudo yum install -y zsh
+       sudo yum install -y zsh
+       ;;
+      debian)
+        sudo apt install zsh
         ;;
-     debian)
-       sudo apt install zsh
-       ;;
-     unkown)
-       echo Unkown Os
-       exit 1
-       ;;
+      unkown)
+        echo Unkown Os
+        exit 1
+        ;;
     esac
 fi
 # 使用antigen管理插件
 [ -f ~/.antigen/antigen.zsh ] || mkdir -p ~/.antigen && cp zsh/antigen.zsh ~/.antigen
 cp .zshrc ~/.zshrc
+
+# neofetch篇
+if ! which neofetch > /etc/null; then
+    echo "No neofetch installed..."
+    case $os_name in
+      redhat)
+        curl -o /etc/yum.repos.d/konimex-neofetch-epel-7.repo \
+            https://copr.fedorainfracloud.org/coprs/konimex/neofetch/repo/epel-7/konimex-neofetch-epel-7.repo
+        sudo yum install -y neofetch
+        ;;
+      debian)
+        sudo apt install neofetch
+        ;;
+      unkown)
+        echo Unkown Os
+        exit 1
+        ;;
+    esac
+fi
+# neofetch配置文件
+[ -f ~/.config/neofetch/config.conf ] || mkdir -p ~/.config/neofetch && cp neofetch/config.conf ~/.config/neofetch
