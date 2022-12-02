@@ -48,6 +48,8 @@ set langmenu=zh_CN
 set ai si
 " 缩进四，tab转空格
 set ts=4 sts=4 sw=4 et
+vnoremap < <gv
+vnoremap > >gv
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
 "}}}
@@ -141,7 +143,9 @@ vnoremap s y:s/<C-R>"//g<left><left>
 vnoremap S y:%s/<C-R>"//g<left><left>
 
 " Cancel highlight
-noremap <leader>nl :set nohl<CR>
+noremap <leader>nl :set nohls<CR>
+" Enable hightlight
+noremap <leader>hl :set hls<CR>
 " Set no number, ready for copy
 noremap <leader>no :set nornu nonu<CR>
 " Set number
@@ -160,7 +164,7 @@ noremap td :bd<CR>
 noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 
 " Compile function
-noremap <C-r> :call CompileRunGcc()<CR>
+noremap <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
     if &filetype == 'c'
         exec "!g++ % -o %<"
