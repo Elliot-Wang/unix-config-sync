@@ -12,6 +12,7 @@ set autochdir
 set whichwrap=b,s,<,>,[,]
 " 搜索默认配置
 set hls is ic scs 
+set updatetime=300
 
 set backspace=indent,eol,start
 set foldmethod=marker
@@ -23,7 +24,8 @@ syntax on
 
 " GUI
 "{{{
-colo desert
+" colo desert
+colo onedark
 
 " 行号，标尺
 set nu rnu cul
@@ -41,6 +43,124 @@ set langmenu=zh_CN
 " let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 "}}}
 
+" Coc Config
+let enableCoc = 1
+
+if enableCoc 
+"{{{
+let g:coc_global_extensions = [
+	\ 'coc-sh',
+	\ 'coc-vimlsp',
+    \ 'coc-explorer',
+    \ 'coc-gitignore',
+    \ 'coc-highlight',
+    \ 'coc-json',
+    \ 'coc-tabnine',
+    \ 'coc-yaml',
+    \ 'coc-diagnostic',
+    \ ]
+	" \ 'coc-markdownlint',
+    " \ 'coc-snippets',
+    " \ 'coc-docker',
+	" \ 'coc-java',
+	" \ 'coc-jest',
+	" \ 'coc-lists',
+	" \ 'coc-omnisharp',
+	" \ 'coc-prettier',
+	" \ 'coc-prisma',
+	" \ 'coc-pyright',
+	" \ 'coc-sourcekit',
+	" \ 'coc-stylelint',
+	" \ 'coc-syntax',
+	" \ 'coc-tasks',
+	" \ 'coc-translator',
+	" \ 'coc-tsserver',
+	" \ 'coc-vetur',
+	" \ 'coc-yank',
+
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Symbol renaming.
+nmap <leader>re <Plug>(coc-rename)
+" Coc Command
+nnoremap <leader>cm :CocCommand 
+
+" Show documentation in preview window.
+nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Explorer
+let g:coc_explorer_global_presets = {
+\   '.vim': {
+\     'root-uri': '~/.vim',
+\   },
+\   'cocConfig': {
+\      'root-uri': '~/.config/coc',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'tab:$': {
+\     'position': 'tab:$',
+\     'quit-on-open': v:true,
+\   },
+\   'floating': {
+\     'position': 'floating',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingTop': {
+\     'position': 'floating',
+\     'floating-position': 'center-top',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   },
+\   'buffer': {
+\     'sources': [{'name': 'buffer', 'expand': v:true}]
+\   },
+\ }
+
+endif "---endif---
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+"}}}
 
 " Format Indent
 "{{{
@@ -67,26 +187,27 @@ noremap <Leader>rc :source ~/.vimrc<CR>
 "{{{
 noremap S :w<CR>
 noremap Q :bd<CR>
-noremap <C-q> :qa!<CR>
+" noremap <C-q> :qa!<CR>
 "}}}
 
-" Move
+" Move and Delete Lines
 "{{{
 noremap H ^
 noremap L $
-noremap J 15<C-e>
-noremap K 15<C-y>
-nnoremap j gj
-nnoremap k gk
+noremap J 15jzz
+noremap K 15kzz
+nnoremap <C-j> gj
+nnoremap <C-k> gk
+
+nnoremap <A-Up> :.-1m.<CR>k
+nnoremap <A-Down> :m.+1<CR>
+nnoremap dD "_dd
 "}}}
 
 " Copy and Paste
 "{{{
-nnoremap Y y$
-nnoremap p gp
+vnoremap <C-c> "*y
 
-nnoremap P "*gp
-vnoremap Y "*y
 inoremap <C-v> <C-r>*
 " To insert unicode characters
 inoremap <C-b> <C-v>
@@ -142,14 +263,10 @@ noremap \s :%s///g<left><left><left>
 vnoremap s y:s/<C-R>"//g<left><left>
 vnoremap S y:%s/<C-R>"//g<left><left>
 
-" Cancel highlight
-noremap <leader>nl :set nohls<CR>
-" Enable hightlight
-noremap <leader>hl :set hls<CR>
-" Set no number, ready for copy
-noremap <leader>no :set nornu nonu<CR>
-" Set number
-noremap <leader>nu :set rnu nu<CR>
+" Toggle search hightlight
+noremap <leader>sl :set hls!<Bar>set hls?<CR>
+" Toggle copy/paste mode
+noremap <leader>cv :set rnu! nonu! paste!<CR>
 
 " Buffers
 "{{{
@@ -205,15 +322,22 @@ endfunc
 "                Plugin                 " 
 """""""""""""""""""""""""""""""""""""""""
 call plug#begin()
-Plug 'junegunn/vim-easy-align'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
-Plug 'preservim/nerdtree'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
-Plug 'ryanoasis/vim-devicons'
+
+Plug 'preservim/nerdtree' |
+  \ Plug 'ryanoasis/vim-devicons' |
+  \ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  " \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+
+Plug 'dbeniamine/cheat.sh-vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'guns/xterm-color-table.vim'
 call plug#end()
 
@@ -223,10 +347,26 @@ call plug#end()
 "{{{
 " File and Undo Tree
 " {{{
-noremap tt :NERDTreeToggle<CR>
-noremap tu :UndotreeToggle<CR>
+noremap <leader>tt :NERDTreeToggle<CR>
+" noremap tt :CocCommand explorer<CR>
+noremap <leader>tu :UndotreeToggle<CR>
 " set g:undotree_ShortIndicators=1
 " set g:undotree_SetFocusWhenToggle=1
+
+let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0 
+let g:NERDTreeMapActivateNode = 'l'
+let g:NERDTreeMapCloseDir = 'h'
+let g:NERDTreeMapUpdirKeepOpen = 'H'
+let g:NERDTreeMapJumpNextSibling = 'J'
+let g:NERDTreeMapJumpPrevSibling = 'K'
+let g:NERDTreeMapJumpLastChild = '<C-J>'
+let g:NERDTreeMapJumpFirstChild = '<C-K>'
+
+let g:NERDTreeMapChangeRoot = 'o'
+
+let g:NERDTreeMapJumpParent = 'u'
+let g:NERDTreeMapJumpRoot = 'U'
+let g:NERDTreeMapUpdir = 'gu'
 " }}}
 
 " Startify Setting
@@ -339,20 +479,8 @@ let g:NERDCreateDefaultMappings = 0
 
 " NerdCommenter Mapping
 "{{{
-map <leader>cm <plug>NERDCommenterToggle
-"Toggles the comment state of the selected line(s). If the topmost selected line is commented, all selected lines are uncommented and vice versa.
-
-"map <plug>NERDCommenterNested
-"Same as cc but forces nesting.
-
-"map <plug>NERDCommenterMinimal
-"Comments the given lines using only one set of multipart delimiters.
-
-"map <plug>NERDCommenterSexy
-"Comments out the selected lines with a pretty block formatted layout.
-
-"map <plug>NERDCommenterYank
-"Same as cc except that the commented line(s) are yanked first.
+nnoremap cm <plug>NERDCommenterToggle<CR>
+vnoremap <leader>cm <plug>NERDCommenterToggle
 "}}}
 
 " }}}

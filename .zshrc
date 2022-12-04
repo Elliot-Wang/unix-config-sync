@@ -37,8 +37,11 @@ elif [ $TERM = 'tmux' ] && [ -e /usr/share/terminfo/t/tmux-256color ]; then
     export TERM='tmux-256color'
 fi
 
+function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
+
 # My Config
 alias neo="neofetch"
+alias ra="ranger"
 neofetch
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
