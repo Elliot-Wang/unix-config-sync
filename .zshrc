@@ -41,7 +41,7 @@ function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
 
 # My Config
 alias neo="neofetch"
-alias ra="ranger"
+alias ra="source ranger"
 neofetch
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
