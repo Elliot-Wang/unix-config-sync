@@ -15,11 +15,31 @@ set hls is ic scs
 set updatetime=300
 
 set backspace=indent,eol,start
-set foldmethod=marker
+set foldmethod=manual
 set encoding=utf-8 nobomb
 
 filetype on
 syntax on
+
+" fu! SaveSess()
+"     execute 'mksession! ~/.default.session.vim'
+" endfunction
+"
+" fu! RestoreSess()
+"     if filereadable('~/.default.session.vim')
+"         execute 'so ~/.default.session.vim'
+"         if bufexists(1)
+"             for l in range(1, bufnr('$'))
+"                 if bufwinnr(l) == -1
+"                     exec 'sbuffer ' . l
+"                 endif
+"             endfor
+"         endif
+"     endif
+" endfunction
+"
+" autocmd VimLeave * call SaveSess()
+" autocmd VimEnter * nested call RestoreSess()
 "}}}
 
 " GUI
@@ -187,7 +207,11 @@ noremap <Leader>rc :source ~/.vimrc<CR>
 "{{{
 noremap S :w<CR>
 noremap Q :bd<CR>
-" noremap <C-q> :qa!<CR>
+
+nnoremap ZQ :xa!<CR>
+nnoremap ZQ :qa!<CR>
+" vim default
+nnoremap ZZ :x<CR>
 "}}}
 
 " Move and Delete Lines
@@ -328,11 +352,6 @@ Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
 
-Plug 'preservim/nerdtree' |
-  \ Plug 'ryanoasis/vim-devicons' |
-  \ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  " \ Plug 'Xuyuanp/nerdtree-git-plugin' |
-
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'jiangmiao/auto-pairs'
@@ -347,31 +366,32 @@ call plug#end()
 "{{{
 " File and Undo Tree
 " {{{
-noremap <leader>tt :NERDTreeToggle<CR>
-" noremap tt :CocCommand explorer<CR>
+" noremap <leader>tt :NERDTreeToggle<CR>
+noremap tt :CocCommand explorer<CR>
 noremap <leader>tu :UndotreeToggle<CR>
 " set g:undotree_ShortIndicators=1
 " set g:undotree_SetFocusWhenToggle=1
 
-let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0 
-let g:NERDTreeMapActivateNode = 'l'
-let g:NERDTreeMapCloseDir = 'h'
-let g:NERDTreeMapUpdirKeepOpen = 'H'
-let g:NERDTreeMapJumpNextSibling = 'J'
-let g:NERDTreeMapJumpPrevSibling = 'K'
-let g:NERDTreeMapJumpLastChild = '<C-J>'
-let g:NERDTreeMapJumpFirstChild = '<C-K>'
-
-let g:NERDTreeMapChangeRoot = 'o'
-
-let g:NERDTreeMapJumpParent = 'u'
-let g:NERDTreeMapJumpRoot = 'U'
-let g:NERDTreeMapUpdir = 'gu'
+" you should install nerdfonts by yourself. default: 0
+" let g:NERDTreeGitStatusUseNerdFonts = 1 
+" let g:NERDTreeMapChangeRoot = 'l'
+" let g:NERDTreeMapJumpParent = 'h'
+" let g:NERDTreeMapUpdirKeepOpen = 'H'
+" let g:NERDTreeMapJumpNextSibling = 'J'
+" let g:NERDTreeMapJumpPrevSibling = 'K'
+" let g:NERDTreeMapJumpLastChild = '<C-J>'
+" let g:NERDTreeMapJumpFirstChild = '<C-K>'
+"
+" let g:NERDTreeMapActivateNode = 'o'
+"
+" let g:NERDTreeMapCloseDir = 'u'
+" let g:NERDTreeMapJumpRoot = 'U'
+" let g:NERDTreeMapUpdir = 'gu'
 " }}}
 
 " Startify Setting
 " {{{
-nnoremap <leader>st Startify
+nnoremap <leader>st :Startify<CR>
 
 let g:startify_lists = [
      \ { 'type': 'sessions'           , 'header': ['   Sessions'  ] } ,
@@ -381,17 +401,21 @@ let g:startify_lists = [
 
 let g:startify_bookmarks = [ 
     \ {'rc': '~/.vimrc'},
+    \ {'cf': '~/.vim/coc-settings.json'},
     \ ]
 
+let g:startify_session_persistence = 1
+let g:startify_session_autoload = 1
+
 " Run Startify for each tab
-autocmd BufWinEnter *
-    \ if !exists('t:startify_new_tab')
-    \     && empty(expand('%'))
-    \     && empty(&l:buftype)
-    \     && &l:modifiable |
-    \   let t:startify_new_tab = 1 |
-    \   Startify |
-    \ endif
+" autocmd BufWinEnter *
+"     \ if !exists('t:startify_new_tab')
+"     \     && empty(expand('%'))
+"     \     && empty(&l:buftype)
+"     \     && &l:modifiable |
+"     \   let t:startify_new_tab = 1 |
+"     \   Startify |
+"     \ endif
 " }}}
 
 " FZF
