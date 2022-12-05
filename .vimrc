@@ -21,31 +21,12 @@ set encoding=utf-8 nobomb
 filetype on
 syntax on
 
-" fu! SaveSess()
-"     execute 'mksession! ~/.default.session.vim'
-" endfunction
-"
-" fu! RestoreSess()
-"     if filereadable('~/.default.session.vim')
-"         execute 'so ~/.default.session.vim'
-"         if bufexists(1)
-"             for l in range(1, bufnr('$'))
-"                 if bufwinnr(l) == -1
-"                     exec 'sbuffer ' . l
-"                 endif
-"             endfor
-"         endif
-"     endif
-" endfunction
-"
-" autocmd VimLeave * call SaveSess()
-" autocmd VimEnter * nested call RestoreSess()
-"}}}
-
 " GUI
 "{{{
-" colo desert
-colo onedark
+colo desert
+if !empty(glob("~/.vim/colors/onedark.vim"))
+    colo onedark
+endif
 
 " 行号，标尺
 set nu rnu cul
@@ -55,12 +36,6 @@ hi ColorColumn guibg=grey
 
 set noshowcmd
 set langmenu=zh_CN
-
-" 不同模式下的光标样式
-" unix 环境下不需要
-" let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-" let &t_SR = "\<Esc>]50;CursorShape=2\x7"
-" let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 "}}}
 
 " Coc Config
@@ -367,7 +342,7 @@ call plug#end()
 " File and Undo Tree
 " {{{
 " noremap <leader>tt :NERDTreeToggle<CR>
-noremap tt :CocCommand explorer<CR>
+noremap <leader>tt :CocCommand explorer<CR>
 noremap <leader>tu :UndotreeToggle<CR>
 " set g:undotree_ShortIndicators=1
 " set g:undotree_SetFocusWhenToggle=1

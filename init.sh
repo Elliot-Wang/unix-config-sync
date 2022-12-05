@@ -17,12 +17,27 @@ if ! which vim > /etc/null; then
         ;;
       unkown)
         echo Unkown Os
+        exit 1
         ;;
     esac
 fi
 # 使用vim-plug管理插件
 [ -f ~/.vim/autoload/plug.vim ] || mkdir -p ~/.vim/autoload && cp vim/plug.vim ~/.vim/autoload/plug.vim
 cp .vimrc ~/.vimrc
+# dnf and nodejs
+case $os_name in
+    redhat)
+        sudo yum install -y dnf
+        sudo dnf install -y nodejs npm
+        sudo dnf -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
+        sudo dnf upgrade -y git
+        ;;
+    debian)
+        sudo apt install nodejs
+        ;;
+    unkown)
+        ;;
+esac
 
 # zsh篇
 if ! which zsh > /etc/null; then
