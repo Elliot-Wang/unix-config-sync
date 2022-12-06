@@ -10,6 +10,8 @@ set history=1024
 set wildmenu
 set autochdir
 set whichwrap=b,s,<,>,[,]
+set nowrap
+
 " 搜索默认配置
 set hls is ic scs 
 set updatetime=300
@@ -38,54 +40,44 @@ set noshowcmd
 set langmenu=zh_CN
 "}}}
 
-" Coc Config
-let enableCoc = 1
+" Difference
+" {{{
+let s:isWin = has('win32') || has('win64')
+let s:enableCoc = 1
+" }}}
 
-if enableCoc 
+" Coc Config
+if s:enableCoc 
 "{{{
 let g:coc_global_extensions = [
-	\ 'coc-sh',
 	\ 'coc-vimlsp',
-    \ 'coc-explorer',
     \ 'coc-gitignore',
     \ 'coc-highlight',
     \ 'coc-json',
     \ 'coc-tabnine',
     \ 'coc-yaml',
     \ 'coc-diagnostic',
+	\ 'coc-lists',
     \ ]
-	" \ 'coc-markdownlint',
-    " \ 'coc-snippets',
-    " \ 'coc-docker',
-	" \ 'coc-java',
-	" \ 'coc-jest',
-	" \ 'coc-lists',
-	" \ 'coc-omnisharp',
-	" \ 'coc-prettier',
-	" \ 'coc-prisma',
-	" \ 'coc-pyright',
-	" \ 'coc-sourcekit',
-	" \ 'coc-stylelint',
-	" \ 'coc-syntax',
-	" \ 'coc-tasks',
-	" \ 'coc-translator',
-	" \ 'coc-tsserver',
-	" \ 'coc-vetur',
-	" \ 'coc-yank',
-
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+if !s:isWin
+    call add(g:coc_global_extensions, [
+	\ 'coc-sh',
+    \ 'coc-explorer',
+    \ ])
+endif
+if has('python3')
+    call add(g:coc_global_extensions, 'coc-snippets')
+endif
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+" Find symbol of current document.
+nnoremap <silent><nowait> go  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent><nowait> gs  :<C-u>CocList -I symbols<cr>
 " Symbol renaming.
 nmap <leader>re <Plug>(coc-rename)
 " Coc Command
@@ -96,6 +88,24 @@ nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Mappings for CoCList
+" Show all diagnostics.
+nnoremap <silent><nowait> <space>dg  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <space>ex  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent><nowait> <space>cm  :<C-u>CocList commands<cr>
+
+" Do default action for next item.
+"nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+"nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " Explorer
 let g:coc_explorer_global_presets = {
@@ -142,7 +152,7 @@ let g:coc_explorer_global_presets = {
 \   },
 \ }
 
-endif "---endif---
+endif "---endif enableCoc---
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -176,20 +186,24 @@ autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
 "{{{
 let mapleader=" "
 
-noremap <Leader>rc :source ~/.vimrc<CR>
+if s:isWin
+    noremap <Leader>rc :source ~/_vimrc<CR>
+else
+    noremap <Leader>rc :source ~/.vimrc<CR>
+endif
 
 " Save and exit
 "{{{
 noremap S :w<CR>
 noremap Q :bd<CR>
 
-nnoremap ZQ :xa!<CR>
+nnoremap ZS :xa!<CR>
 nnoremap ZQ :qa!<CR>
 " vim default
 nnoremap ZZ :x<CR>
 "}}}
 
-" Move and Delete Lines
+" Move
 "{{{
 noremap H ^
 noremap L $
@@ -197,15 +211,12 @@ noremap J 15jzz
 noremap K 15kzz
 nnoremap <C-j> gj
 nnoremap <C-k> gk
-
-nnoremap <A-Up> :.-1m.<CR>k
-nnoremap <A-Down> :m.+1<CR>
-nnoremap dD "_dd
 "}}}
 
 " Copy and Paste
 "{{{
 vnoremap <C-c> "*y
+vnoremap Y "*y
 
 inoremap <C-v> <C-r>*
 " To insert unicode characters
@@ -235,10 +246,10 @@ nnoremap sc <C-w>c                              " 关闭当前分屏
 
 " Move to Windows
 "{{{
-nnoremap <LEADER>k <C-w>k	" 光标到上屏
-nnoremap <LEADER>j <C-w>j	" 光标到下屏
-nnoremap <LEADER>h <C-w>h	" 光标到左屏
-nnoremap <LEADER>l <C-w>l	" 光标到右屏
+nnoremap <leader>k <C-w>k	" 光标到上屏
+nnoremap <leader>j <C-w>j	" 光标到下屏
+nnoremap <leader>h <C-w>h	" 光标到左屏
+nnoremap <leader>l <C-w>l	" 光标到右屏
 "}}}
 
 " Resize Windows
@@ -272,12 +283,13 @@ noremap <leader>cv :set rnu! nonu! paste!<CR>
 noremap th :bp!<CR>
 noremap tl :bn!<CR>
 noremap td :bd<CR>
+noremap tD :bd!<CR>
 "}}}
 "
 " Execute and Run
 "{{{
 " Open Terminal
-noremap <LEADER>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
+noremap <leader>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
 
 " Compile function
 noremap <F5> :call CompileRunGcc()<CR>
@@ -327,11 +339,19 @@ Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
 
+if has('win32') || has('win64')
+    Plug 'preservim/nerdtree' |
+      \ Plug 'ryanoasis/vim-devicons' |
+      \ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+      " \ Plug 'Xuyuanp/nerdtree-git-plugin' |
+endif
+
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Plug 'guns/xterm-color-table.vim'
 call plug#end()
 
@@ -341,27 +361,33 @@ call plug#end()
 "{{{
 " File and Undo Tree
 " {{{
-" noremap <leader>tt :NERDTreeToggle<CR>
-noremap <leader>tt :CocCommand explorer<CR>
+if s:isWin
+    noremap <leader>tt :NERDTreeToggle<CR>
+    " you should install nerdfonts by yourself. default: 0
+    let g:NERDTreeGitStatusUseNerdFonts = 1 
+    let g:NERDTreeMapChangeRoot = 'l'
+    let g:NERDTreeMapJumpParent = 'h'
+    let g:NERDTreeMapUpdirKeepOpen = 'H'
+    let g:NERDTreeMapJumpNextSibling = 'J'
+    let g:NERDTreeMapJumpPrevSibling = 'K'
+    let g:NERDTreeMapJumpLastChild = '<C-J>'
+    let g:NERDTreeMapJumpFirstChild = '<C-K>'
+    
+    let g:NERDTreeMapActivateNode = 'o'
+    
+    let g:NERDTreeMapCloseDir = 'u'
+    let g:NERDTreeMapJumpRoot = 'U'
+    let g:NERDTreeMapUpdir = 'gu'
+
+    let g:NERDTreeDirArrowExpandable=">"
+    let g:NERDTreeDirArrowCollapsible="v"
+else
+    noremap <leader>tt :CocCommand explorer<CR>
+endif
 noremap <leader>tu :UndotreeToggle<CR>
 " set g:undotree_ShortIndicators=1
 " set g:undotree_SetFocusWhenToggle=1
 
-" you should install nerdfonts by yourself. default: 0
-" let g:NERDTreeGitStatusUseNerdFonts = 1 
-" let g:NERDTreeMapChangeRoot = 'l'
-" let g:NERDTreeMapJumpParent = 'h'
-" let g:NERDTreeMapUpdirKeepOpen = 'H'
-" let g:NERDTreeMapJumpNextSibling = 'J'
-" let g:NERDTreeMapJumpPrevSibling = 'K'
-" let g:NERDTreeMapJumpLastChild = '<C-J>'
-" let g:NERDTreeMapJumpFirstChild = '<C-K>'
-"
-" let g:NERDTreeMapActivateNode = 'o'
-"
-" let g:NERDTreeMapCloseDir = 'u'
-" let g:NERDTreeMapJumpRoot = 'U'
-" let g:NERDTreeMapUpdir = 'gu'
 " }}}
 
 " Startify Setting
@@ -374,24 +400,21 @@ let g:startify_lists = [
      \ { 'type': 'files'              , 'header': ['   File'      ] } ,
      \ ]
 
-let g:startify_bookmarks = [ 
-    \ {'rc': '~/.vimrc'},
-    \ {'cf': '~/.vim/coc-settings.json'},
-    \ ]
+if s:isWin
+    let g:startify_bookmarks = [ 
+        \ {'rc': '~/_vimrc'},
+        \ {'rg': '~/_gvimrc'},
+        \ {'cf': '~/vimfiles/coc-settings.json'},
+        \ ]
+else
+    let g:startify_bookmarks = [ 
+        \ {'rc': '~/.vimrc'},
+        \ {'cf': '~/.vim/coc-settings.json'},
+        \ ]
+endif
 
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
-
-" Run Startify for each tab
-" autocmd BufWinEnter *
-"     \ if !exists('t:startify_new_tab')
-"     \     && empty(expand('%'))
-"     \     && empty(&l:buftype)
-"     \     && &l:modifiable |
-"     \   let t:startify_new_tab = 1 |
-"     \   Startify |
-"     \ endif
-" }}}
 
 " FZF
 "{{{
@@ -478,8 +501,8 @@ let g:NERDCreateDefaultMappings = 0
 
 " NerdCommenter Mapping
 "{{{
-nnoremap cm <plug>NERDCommenterToggle<CR>
-vnoremap <leader>cm <plug>NERDCommenterToggle
+nnoremap <C-_> <plug>NERDCommenterToggle<CR>
+vnoremap <C-_> <plug>NERDCommenterToggle
 "}}}
 
 " }}}
