@@ -22,12 +22,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen apply
 
 # custom config
-# 没有匹配项的时候会报错，先注释掉
-# for i in ~/.zsh/*.zsh ; do
-#     if [ -r "$i" ]; then
-#         . "$i"
-#     fi
-# done
+foreach file ("`find $PWD/.zsh/ -name '*.zsh' -type f -print`") ; source $file; end
 
 if [ $TERM = 'xterm' ] && [ -e /usr/share/terminfo/x/xterm-256color ]; then
     export TERM='xterm-256color'

@@ -60,10 +60,8 @@ let g:coc_global_extensions = [
 	\ 'coc-lists',
     \ ]
 if !s:isWin
-    call add(g:coc_global_extensions, [
-	\ 'coc-sh',
-    \ 'coc-explorer',
-    \ ])
+    call add(g:coc_global_extensions, 'coc-sh')
+    call add(g:coc_global_extensions, 'coc-explorer')
 endif
 if has('python3')
     call add(g:coc_global_extensions, 'coc-snippets')
