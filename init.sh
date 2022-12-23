@@ -23,6 +23,8 @@ if ! which vim > /etc/null; then
 fi
 # 使用vim-plug管理插件
 [ -f ~/.vim/autoload/plug.vim ] || mkdir -p ~/.vim/autoload && cp vim/plug.vim ~/.vim/autoload/plug.vim
+# onedark.vim
+cp -r vim/onedark.vim/* ~/.vim
 cp .vimrc ~/.vimrc
 # dnf and nodejs
 case $os_name in
