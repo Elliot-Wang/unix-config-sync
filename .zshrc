@@ -22,7 +22,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen apply
 
 # custom config
-find $PWD/.zsh/ -name '*.zsh' -type f -print0 2> /dev/null |  while read -d $'\0' file; do source $file; done
+find $HOME/.zsh/ -name '*.zsh' -type f -print0 2> /dev/null |  while read -d $'\0' file; do source $file; done
 
 if [ $TERM = 'xterm' ] && [ -e /usr/share/terminfo/x/xterm-256color ]; then
     export TERM='xterm-256color'
