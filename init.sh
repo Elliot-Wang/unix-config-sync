@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # 确认系统发行版本
-os_name="unknown"
+os_name=${uname}
 test -f /etc/redhat-release && os_name="redhat"
 test -f /etc/debian_version && os_name="debian"
 
 # vim篇
-if ! which vim > /etc/null; then
+if ! which vim > /dev/null; then
     echo "No Vim installed..."
     case $os_name in
       redhat)
@@ -15,7 +15,7 @@ if ! which vim > /etc/null; then
       debian)
         sudo apt install vim
         ;;
-      unkown)
+      * )
         echo Unkown Os
         exit 1
         ;;
@@ -37,12 +37,14 @@ case $os_name in
     debian)
         sudo apt install nodejs
         ;;
-    unkown)
+    Darwin)
+        # it depende on
+    * )
         ;;
 esac
 
 # zsh篇
-if ! which zsh > /etc/null; then
+if ! which zsh > /dev/null; then
     echo "No zsh installed..."
     case $os_name in
       redhat)
@@ -51,7 +53,7 @@ if ! which zsh > /etc/null; then
       debian)
         sudo apt install zsh
         ;;
-      unkown)
+      * )
         echo Unkown Os
         exit 1
         ;;
@@ -60,9 +62,10 @@ fi
 # 使用antigen管理插件
 [ -f ~/.antigen/antigen.zsh ] || mkdir -p ~/.antigen && cp zsh/antigen.zsh ~/.antigen
 cp .zshrc ~/.zshrc
+{ test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*; do cp $file ~/$file; done
 
 # neofetch篇
-if ! which neofetch > /etc/null; then
+if ! which neofetch > /dev/null; then
     echo "No neofetch installed..."
     case $os_name in
       redhat)
@@ -73,7 +76,9 @@ if ! which neofetch > /etc/null; then
       debian)
         sudo apt install neofetch
         ;;
-      unkown)
+      Darwin)
+        ;;
+      * )
         echo Unkown Os
         exit 1
         ;;
