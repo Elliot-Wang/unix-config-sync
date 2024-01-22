@@ -43,7 +43,7 @@ set langmenu=zh_CN
 " Difference
 " {{{
 let s:isWin = has('win32') || has('win64')
-let s:enableCoc = 1
+let s:enableCoc = 0
 " }}}
 
 " Coc Config
@@ -233,29 +233,29 @@ nnoremap dD "_dd
 nnoremap s <nop>
 nnoremap sk :set splitbelow<CR>:split<CR>		" 下分屏
 nnoremap sj :set nosplitbelow<CR>:split<CR>		" 上分屏
-nnoremap sl :set nosplitright<CR>:vsplit<CR>	" 右分屏 
-nnoremap sh :set splitright<CR>:vsplit<CR>		" 左分屏	
-nnoremap sH <C-w>t<C-w>H 	                    " 竖向分屏换左右分屏
-nnoremap sJ <C-w>t<C-w>J 	                    " 竖向分屏换左右分屏
-nnoremap sK <C-w>t<C-w>K		                " 左右分屏换竖向分屏
-nnoremap sL <C-w>t<C-w>L		                " 左右分屏换竖向分屏
-nnoremap sc <C-w>c                              " 关闭当前分屏
+nnoremap sl :set nosplitright<CR>:vsplit<CR>	" 右分屏
+nnoremap sh :set splitright<CR>:vsplit<CR>		" 左分屏
+nnoremap sL <C-W>L 	                    " 左右分屏换竖向分屏
+nnoremap sK <C-W>K 	                    " 竖向分屏换左右分屏
+nnoremap sJ <C-W>J		                " 竖向分屏换左右分屏
+nnoremap sH <C-W>H		                " 左右分屏换竖向分屏
+nnoremap sc <C-W>c                              " 关闭当前分屏
 "}}}
 
 " Move to Windows
 "{{{
-nnoremap <leader>k <C-w>k	" 光标到上屏
-nnoremap <leader>j <C-w>j	" 光标到下屏
-nnoremap <leader>h <C-w>h	" 光标到左屏
-nnoremap <leader>l <C-w>l	" 光标到右屏
+nnoremap <LEADER>k <C-W>k	" 光标到上屏
+nnoremap <LEADER>j <C-W>j	" 光标到下屏
+nnoremap <LEADER>h <C-W>h	" 光标到左屏
+nnoremap <LEADER>l <C-W>l	" 光标到右屏
 "}}}
 
 " Resize Windows
 "{{{
-nnoremap <leader><up> :res +5<CR>				" 分屏线上移
-nnoremap <leader><down> :res -5<CR>				" 分屏线下移
-nnoremap <leader><left> :vertical resize+5<CR>	" 分屏线左移
-nnoremap <leader><right> :vertical resize-5<CR>	" 分屏线右移
+nnoremap <LEADER><UP> :res +5<CR>				" 分屏线上移
+nnoremap <LEADER><DOWN> :res -5<CR>				" 分屏线下移
+nnoremap <LEADER><LEFT> :vertical resize+5<CR>	" 分屏线左移
+nnoremap <LEADER><RIGHT> :vertical resize-5<CR>	" 分屏线右移
 "}}}
 
 " Tabs of Windows
@@ -287,40 +287,34 @@ noremap tD :bd!<CR>
 " Execute and Run
 "{{{
 " Open Terminal
-noremap <leader>/ :set splitbelow<CR>:split<CR>:res +10<CR>:term<CR>
+noremap <leader>/ :bel term<CR>
+" Esc to Normal mode
+tnoremap <C-[> <C-\><C-n>
 
 " Compile function
-noremap <F5> :call CompileRunGcc()<CR>
-func! CompileRunGcc()
+noremap <F5> :call CompileRun()<CR>
+func! CompileRun()
     if &filetype == 'c'
         exec "!g++ % -o %<"
         exec "!time ./%<"
     elseif &filetype == 'cpp'
         exec "!g++ -std=c++11 % -Wall -o %<"
         term ./%<
-        :winc J
-        :res -10
     elseif &filetype == 'java'
         exec "!javac %"
         exec "!time java %<"
     elseif &filetype == 'python'
         term python3 %
-        :winc J
-        :res -10
     elseif &filetype == 'html'
         silent! exec "!".g:mkdp_browser." % &"
     elseif &filetype == 'markdown'
         exec "MarkdownPreview"
     elseif &filetype == 'javascript'
-        term export DEBUG="INFO,ERROR,WARNING"; node --trace-warnings .
-        :winc J
-        :res -10
+        term zsh -c "export DEBUG=\"INFO,ERROR,WARNING\" && node --trace-warnings %"
     elseif &filetype == 'go'
         term go run .
-        :winc J
-        :res -10
     elseif &filetype == 'vim'
-        :source %
+        :source %:p
     endif
 endfunc
 "}}}
@@ -344,10 +338,20 @@ if has('win32') || has('win64')
       " \ Plug 'Xuyuanp/nerdtree-git-plugin' |
 endif
 
-Plug 'dbeniamine/cheat.sh-vim'
+" Plug 'dbeniamine/cheat.sh-vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+" Plug 'mg979/vim-visual-multi'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'chiedo/vim-case-convert'
+
+" improve motion
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'machakann/vim-highlightedyank'
+Plug 'michaeljsmith/vim-indent-object'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Plug 'guns/xterm-color-table.vim'
@@ -396,6 +400,7 @@ let g:startify_lists = [
      \ { 'type': 'sessions'           , 'header': ['   Sessions'  ] } ,
      \ { 'type': 'bookmarks'          , 'header': ['   Bookmarks' ] } ,
      \ { 'type': 'files'              , 'header': ['   File'      ] } ,
+     \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
      \ ]
 
 if s:isWin
@@ -407,9 +412,17 @@ if s:isWin
 else
     let g:startify_bookmarks = [ 
         \ {'rc': '~/.vimrc'},
+        \ {'ic': '~/.ideavimrc'},
         \ {'cf': '~/.vim/coc-settings.json'},
         \ ]
 endif
+
+let g:startify_skiplist = [
+       \ '\.vimgolf',
+       \ '^/tmp',
+       \ '/project/.*/documentation',
+       \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
+       \ ]
 
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
@@ -419,6 +432,34 @@ let g:startify_session_autoload = 1
 noremap <leader>bf :Buffers<CR>
 noremap <leader>se :Files<CR>
 noremap <C-f> :Lines<CR>
+"}}}
+"
+" argtextobj
+"{{{
+let g:argtextobj_pairs="[:],(:),{:}"
+"}}}
+
+" vim-easy-align
+"{{{
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+"}}}
+
+" vim-multiple-cursors
+"{{{
+let g:multi_cursor_use_default_mapping=0
+
+" Default mapping
+let g:mucti_cursor_start_word_key      = '<C-n>'
+let g:multi_cursor_select_all_word_key = '<C-S-n>'
+let g:multi_cursor_start_key           = 'g<C-n>'
+let g:multi_cursor_select_all_key      = 'g<C-S-n>'
+let g:multi_cursor_next_key            = '<C-n>'
+let g:multi_cursor_prev_key            = '<C-p>'
+let g:multi_cursor_skip_key            = '<C-x>'
+let g:multi_cursor_quit_key            = '<Esc>'
 "}}}
 
 " Airline Bar
@@ -503,4 +544,4 @@ nnoremap <C-_> <plug>NERDCommenterToggle<CR>
 vnoremap <C-_> <plug>NERDCommenterToggle
 "}}}
 
-" }}}
+"}}}
