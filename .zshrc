@@ -45,8 +45,3 @@ fi
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-fpath=(~/.zsh/_cht $fpath)
-
-export MVN_HOME="/Users/mac/Opt/apache-maven-3.6.3"
-export PATH="$MVN_HOME/bin:$PATH"
-export PATH="/usr/local/opt/mysql-client@5.7/bin:$PATH"
