@@ -39,7 +39,6 @@ case $os_name in
         ;;
     Darwin)
         # it depende on
-    * )
         ;;
 esac
 
@@ -77,6 +76,7 @@ if ! which neofetch > /dev/null; then
         sudo apt install neofetch
         ;;
       Darwin)
+          echo test
         ;;
       * )
         echo Unkown Os
