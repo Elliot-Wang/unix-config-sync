@@ -76,7 +76,7 @@ if ! which neofetch > /dev/null; then
         sudo apt install neofetch
         ;;
       Darwin)
-          echo test
+        brew install neofetch
         ;;
       * )
         echo Unkown Os
@@ -84,5 +84,6 @@ if ! which neofetch > /dev/null; then
         ;;
     esac
 fi
+
 # neofetch配置文件
 [ -f ~/.config/neofetch/config.conf ] || mkdir -p ~/.config/neofetch && cp neofetch/config.conf ~/.config/neofetch
