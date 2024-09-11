@@ -61,7 +61,7 @@ fi
 # 使用antigen管理插件
 [ -f ~/.antigen/antigen.zsh ] || mkdir -p ~/.antigen && cp zsh/antigen.zsh ~/.antigen
 cp .zshrc ~/.zshrc
-{ test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*; do cp $file ~/$file; done
+{ test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*.zsh; do cp $file ~/$file; done
 
 # neofetch篇
 if ! which neofetch > /dev/null; then
@@ -87,3 +87,43 @@ fi
 
 # neofetch配置文件
 [ -f ~/.config/neofetch/config.conf ] || mkdir -p ~/.config/neofetch && cp neofetch/config.conf ~/.config/neofetch
+
+# ranger
+if ! which ranger > /dev/null; then
+    echo "No ranger installed..."
+    case $os_name in
+      redhat|debian|Darwin)
+        pip3 install ranger-fm
+        ranger --copy-config=rc
+        ranger --copy-config=scope
+        ;;
+      * )
+        echo Unkown Os
+        exit 1
+        ;;
+    esac
+fi
+
+# alter to native cmd
+if $os_name == Darwin; then
+    # no override config
+    test -e ~/.zsh/alter.zsh || cp ./.zsh/alter.zsh.mac ~/.zsh/alter.zsh
+    # cat alter
+    if ! which bat > /dev/null; then
+        brew install bat
+    fi
+    # cd alter
+    if ! which zoxide > /dev/null; then
+        brew install zoxide
+    fi
+
+    # install cargo
+    if ! which cargo > /dev/null; then
+        brew install rust
+    fi
+    # ls alter
+    if ! which exa > /dev/null; then
+        cargo install exa
+    fi
+fi
+

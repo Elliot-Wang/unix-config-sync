@@ -43,7 +43,7 @@ set langmenu=zh_CN
 " Difference
 " {{{
 let s:isWin = has('win32') || has('win64')
-let s:enableCoc = 0
+let s:enableCoc = 1
 " }}}
 
 " Coc Config
