@@ -125,5 +125,8 @@ if $os_name == Darwin; then
     if ! which exa > /dev/null; then
         cargo install exa
     fi
+
+    # optional
+    # fd, choose, duf, dust, htop, httpie...
 fi
 
