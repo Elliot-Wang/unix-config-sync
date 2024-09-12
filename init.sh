@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 确认系统发行版本
-os_name=${uname}
+os_name=$(uname)
 test -f /etc/redhat-release && os_name="redhat"
 test -f /etc/debian_version && os_name="debian"
 
@@ -109,7 +109,7 @@ fi
 opt=("")
 
 # alter to native cmd
-if $os_name == Darwin; then
+if [[ "$os_name" == "Darwin" ]]; then
     # no override config
     test -e ~/.zsh/alter.zsh || cp ./.zsh/alter.zsh.mac ~/.zsh/alter.zsh
     # cat alter
