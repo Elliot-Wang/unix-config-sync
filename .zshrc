@@ -37,6 +37,9 @@ fi
 function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
 
 # My Config
+# async-prompt is experimental feature and disabled for stable
+zstyle ':omz:alpha:lib:git' async-prompt no
+
 alias neo="neofetch"
 alias ra="source ranger"
 
