@@ -5,8 +5,8 @@
 [ -f ~/.config/neofetch/config.conf ] && cp ~/.config/neofetch/config.conf neofetch
 
 git add --all
-if $1; then
-    git commmit -m $1
-else
+if [ -z "$1" ]; then
     git commit -m "update at [$(date +'%F %T')]"
+else
+    git commit -m "$1"
 fi
