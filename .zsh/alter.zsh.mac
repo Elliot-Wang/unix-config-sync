@@ -1,5 +1,6 @@
-alias cat="bat"
+alias cat="bat --plain"
 alias ls="exa --icons --sort=ext"
+alias la="exa --icons --sort=ext --all"
 alias ll="exa --icons --sort=ext --long --header --grid"
 alias lt="exa --icons --sort=ext --tree --level=2 --color=always | less -R"
 alias llt="exa --icons --sort=ext --tree --level=2 --long --header --color=always | less -R"
@@ -16,3 +17,4 @@ help() {
 }
 
 eval "$(zoxide init zsh)"
+alias cd="z"
