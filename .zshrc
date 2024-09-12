@@ -7,6 +7,8 @@ antigen use oh-my-zsh
 # Load the theme.
 antigen theme ys
 
+# atuin
+antigen bundle atuinsh/atuin@main
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
 antigen bundle heroku
