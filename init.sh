@@ -104,6 +104,10 @@ if ! which ranger > /dev/null; then
     esac
 fi
 
+# optional
+# fd, choose, duf, dust, htop, httpie...
+opt=("")
+
 # alter to native cmd
 if $os_name == Darwin; then
     # no override config
@@ -126,7 +130,14 @@ if $os_name == Darwin; then
         cargo install exa
     fi
 
-    # optional
-    # fd, choose, duf, dust, htop, httpie...
+    for element in "${arr[@]}"; do
+        # diff alter
+        if [[ "$element" == "delta" ]]; then
+            if ! which delta > /dev/null; then
+                brew install git-delta
+            fi
+        fi
+    done
+
 fi
 
