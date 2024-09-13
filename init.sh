@@ -137,6 +137,18 @@ if [[ "$os_name" == "Darwin" ]]; then
                 brew install git-delta
             fi
         fi
+        # find alter
+        if [[ "$element" == "fd" ]]; then
+            if ! which fd > /dev/null; then
+                brew install fd
+            fi
+        fi
+        # sed alter
+        if [[ "$element" == "sd" ]]; then
+            if ! which sd > /dev/null; then
+                cargo install sd
+            fi
+        fi
     done
 
 fi
