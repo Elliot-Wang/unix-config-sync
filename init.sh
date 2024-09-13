@@ -149,6 +149,12 @@ if [[ "$os_name" == "Darwin" ]]; then
                 cargo install sd
             fi
         fi
+        # git grep alter
+        if [[ "$element" == "ripgrep" ]]; then
+            if ! which rg > /dev/null; then
+                brew install ripgrep
+            fi
+        fi
     done
 
 fi
