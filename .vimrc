@@ -79,7 +79,7 @@ nnoremap <silent><nowait> gs  :<C-u>CocList -I symbols<cr>
 " Symbol renaming.
 nmap <leader>re <Plug>(coc-rename)
 " Coc Command
-nnoremap <leader>cm :CocCommand 
+" nnoremap <leader>cm :CocCommand
 
 " Show documentation in preview window.
 nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
@@ -313,6 +313,8 @@ func! CompileRun()
         term zsh -c "export DEBUG=\"INFO,ERROR,WARNING\" && node --trace-warnings %"
     elseif &filetype == 'go'
         term go run .
+    elseif &filetype == 'zsh'
+        :source %:p
     elseif &filetype == 'vim'
         :source %:p
     endif

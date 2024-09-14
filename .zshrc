@@ -9,6 +9,8 @@ antigen theme ys
 
 # atuin
 antigen bundle atuinsh/atuin@main
+# forgit
+antigen bundle wfxr/forgit
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
 antigen bundle git
 antigen bundle heroku
@@ -24,7 +26,7 @@ antigen bundle zsh-users/zsh-autosuggestions
 antigen apply
 
 # custom config
-find -s $HOME/.zsh/ -name '*.zsh' -type f -print0 2> /dev/null |  while read -d $'\0' file; do source $file; done
+find $HOME/.zsh/ -name '*.zsh' -type f -print0 2> /dev/null |  while read -d $'\0' file; do source $file; done
 
 if [ $TERM = 'xterm' ] && [ -e /usr/share/terminfo/x/xterm-256color ]; then
     export TERM='xterm-256color'
@@ -41,7 +43,7 @@ function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
 zstyle ':omz:alpha:lib:git' async-prompt no
 
 alias neo="neofetch"
-alias ra="source ranger"
+alias ra="ranger"
 
 if [ ! $TERM_PROGRAM = 'vscode' ]; then
     neofetch

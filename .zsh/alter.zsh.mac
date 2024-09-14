@@ -2,8 +2,10 @@ alias cat="bat --plain"
 alias ls="exa --icons --sort=ext"
 alias la="exa --icons --sort=ext --all"
 alias ll="exa --icons --sort=ext --long --header --grid"
-alias lt="exa --icons --sort=ext --tree --level=2 --color=always | less -R"
-alias llt="exa --icons --sort=ext --tree --level=2 --long --header --color=always | less -R"
+alias lla="exa --icons --sort=ext --long --header --grid --all"
+alias lt="exa --icons --sort=ext --tree --level=3 --color=always"
+alias llt="exa --icons --sort=ext --tree --level=3 --long --header --color=always"
+
 # a colorizing pager for man
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
@@ -16,5 +18,16 @@ help() {
     "$@" --help 2>&1 | bathelp
 }
 
+# When set to 1, z will print the matched directory before navigating to it
+export _ZO_ECHO="1"
 eval "$(zoxide init zsh)"
 alias cd="z"
+
+# Set up fzf key bindings and fuzzy completion
+# source <(fzf --zsh)
+
+# Setting fd as the default source for fzf
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix'
+
+[ -f $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh ] && source $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh
+
