@@ -1,4 +1,3 @@
-alias cat="bat --plain"
 alias ls="exa --icons --sort=ext"
 alias la="exa --icons --sort=ext --all"
 alias ll="exa --icons --sort=ext --long --header --grid"
@@ -6,6 +5,8 @@ alias lla="exa --icons --sort=ext --long --header --grid --all"
 alias lt="exa --icons --sort=ext --tree --level=3 --color=always"
 alias llt="exa --icons --sort=ext --tree --level=3 --long --header --color=always"
 
+alias cat="bat"
+export BAT_THEME="OneHalfDark"
 # a colorizing pager for man
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
