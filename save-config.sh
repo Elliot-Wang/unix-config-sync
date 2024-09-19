@@ -11,8 +11,13 @@ if [[ "$os_name" == "Darwin" ]]; then
 fi
 
 git add --all
+
 if [ -z "$1" ]; then
-    git commit -m "update at [$(date +'%F %T')]"
+    echo "please commit manually"
 else
-    git commit -m "$1"
+    if [[ "ts" == "$1" ]]; then
+        git commit -m "update at [$(date +'%F %T')]"
+    else
+        git commit -m "$1"
+    fi
 fi
