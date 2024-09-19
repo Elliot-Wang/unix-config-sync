@@ -1,8 +1,6 @@
 #!/bin/bash
 
-[ -f ~/.vimrc ] && cp ~/.vimrc .vimrc
-[ -f ~/.zshrc ] && cp ~/.zshrc .zshrc
-[ -f ~/.config/neofetch/config.conf ] && cp ~/.config/neofetch/config.conf neofetch
+./sync.zsh save
 
 # 确认系统发行版本
 os_name=$(uname)

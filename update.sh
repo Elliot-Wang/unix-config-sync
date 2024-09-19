@@ -14,6 +14,7 @@ case $opt in
     ;;
 esac
 
+./sync.zsh update
 [ -f .vimrc ] && [ -f ~/.vimrc ] && cp .vimrc ~/.vimrc
 [ -f .zshrc ] && [ -f ~/.zshrc ] && cp .zshrc ~/.zshrc
 [ -f neofetch/config.conf ] && [ -f ~/.config/neofetch/config.conf ] && cp neofetch/config.conf ~/.config/neofetch/config.conf 
