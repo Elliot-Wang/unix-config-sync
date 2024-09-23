@@ -2,12 +2,6 @@
 
 ./sync.zsh save
 
-# 确认系统发行版本
-os_name=$(uname)
-if [[ "$os_name" == "Darwin" ]]; then
-    [ -f  ~/.zsh/alter.zsh ] && cp ~/.zsh/alter.zsh ./.zsh/alter.zsh.mac 
-fi
-
 git add --all
 
 if [ -z "$1" ]; then
