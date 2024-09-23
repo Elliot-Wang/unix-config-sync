@@ -8,6 +8,11 @@ config_file=( \
  ~/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git/git.plugin.zsh zsh/git.plugin.zsh
 )
 
+# Darwin
+mac_config_file=( \
+ ~/.zsh/alter.zsh ./.zsh/alter.zsh.mac 
+)
+
 function save() {
     len=${#config_file[@]}
     declare -i i=0

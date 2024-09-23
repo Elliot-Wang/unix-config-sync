@@ -77,9 +77,9 @@ nnoremap <silent><nowait> go  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> gs  :<C-u>CocList -I symbols<cr>
 " Symbol renaming.
-nmap <leader>re <Plug>(coc-rename)
+nmap <Leader>re <Plug>(coc-rename)
 " Coc Command
-" nnoremap <leader>cm :CocCommand
+" nnoremap <Leader>cm :CocCommand
 
 " Show documentation in preview window.
 nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
@@ -244,18 +244,18 @@ nnoremap sc <C-W>c                              " 关闭当前分屏
 
 " Move to Windows
 "{{{
-nnoremap <LEADER>k <C-W>k	" 光标到上屏
-nnoremap <LEADER>j <C-W>j	" 光标到下屏
-nnoremap <LEADER>h <C-W>h	" 光标到左屏
-nnoremap <LEADER>l <C-W>l	" 光标到右屏
+nnoremap <Leader>k <C-W>k	" 光标到上屏
+nnoremap <Leader>j <C-W>j	" 光标到下屏
+nnoremap <Leader>h <C-W>h	" 光标到左屏
+nnoremap <Leader>l <C-W>l	" 光标到右屏
 "}}}
 
 " Resize Windows
 "{{{
-nnoremap <LEADER><UP> :res +5<CR>				" 分屏线上移
-nnoremap <LEADER><DOWN> :res -5<CR>				" 分屏线下移
-nnoremap <LEADER><LEFT> :vertical resize+5<CR>	" 分屏线左移
-nnoremap <LEADER><RIGHT> :vertical resize-5<CR>	" 分屏线右移
+nnoremap <Leader><UP> :res +5<CR>				" 分屏线上移
+nnoremap <Leader><DOWN> :res -5<CR>				" 分屏线下移
+nnoremap <Leader><LEFT> :vertical resize+5<CR>	" 分屏线左移
+nnoremap <Leader><RIGHT> :vertical resize-5<CR>	" 分屏线右移
 "}}}
 
 " Tabs of Windows
@@ -272,9 +272,9 @@ vnoremap s y:s/<C-R>"//g<left><left>
 vnoremap S y:%s/<C-R>"//g<left><left>
 
 " Toggle search hightlight
-noremap <leader>sl :set hls!<Bar>set hls?<CR>
+noremap <Leader>sl :set hls!<Bar>set hls?<CR>
 " Toggle copy/paste mode
-noremap <leader>cv :set rnu! nonu! paste!<CR>
+noremap <Leader>cv :set rnu! nonu! paste!<CR>
 
 " Buffers
 "{{{
@@ -287,7 +287,7 @@ noremap tD :bd!<CR>
 " Execute and Run
 "{{{
 " Open Terminal
-noremap <leader>/ :bel term<CR>
+noremap <Leader>/ :bel term<CR>
 " Esc to Normal mode
 tnoremap <C-[> <C-\><C-n>
 
@@ -356,6 +356,9 @@ Plug 'michaeljsmith/vim-indent-object'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 " Plug 'guns/xterm-color-table.vim'
 call plug#end()
 
@@ -366,7 +369,7 @@ call plug#end()
 " File and Undo Tree
 " {{{
 if s:isWin
-    noremap <leader>tt :NERDTreeToggle<CR>
+    noremap <Leader>tt :NERDTreeToggle<CR>
     " you should install nerdfonts by yourself. default: 0
     let g:NERDTreeGitStatusUseNerdFonts = 1 
     let g:NERDTreeMapChangeRoot = 'l'
@@ -386,9 +389,9 @@ if s:isWin
     let g:NERDTreeDirArrowExpandable=">"
     let g:NERDTreeDirArrowCollapsible="v"
 else
-    noremap <leader>tt :CocCommand explorer<CR>
+    noremap <Leader>tt :CocCommand explorer<CR>
 endif
-noremap <leader>tu :UndotreeToggle<CR>
+noremap <Leader>tu :UndotreeToggle<CR>
 " set g:undotree_ShortIndicators=1
 " set g:undotree_SetFocusWhenToggle=1
 
@@ -396,7 +399,7 @@ noremap <leader>tu :UndotreeToggle<CR>
 
 " Startify Setting
 " {{{
-nnoremap <leader>st :Startify<CR>
+nnoremap <Leader>st :Startify<CR>
 
 let g:startify_lists = [
      \ { 'type': 'sessions'           , 'header': ['   Sessions'  ] } ,
@@ -431,8 +434,11 @@ let g:startify_session_autoload = 1
 
 " FZF
 "{{{
-noremap <leader>bf :Buffers<CR>
-noremap <leader>se :Files<CR>
+noremap gt :Buffers<CR>
+noremap gm :Marks<CR>
+noremap gp :Jumps<CR>
+noremap go :Commands<CR>
+noremap <Leader>se :GFiles<CR>
 noremap <C-f> :Lines<CR>
 "}}}
 "
@@ -440,6 +446,16 @@ noremap <C-f> :Lines<CR>
 "{{{
 let g:argtextobj_pairs="[:],(:),{:}"
 "}}}
+
+" gitgutter
+" {{{
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
+nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
+nmap <Leader>hs <Plug>(GitGutterStageHunk)
+nmap <Leader>hu <Plug>(GitGutterUndoHunk)
+" }}}
 
 " vim-easy-align
 "{{{
