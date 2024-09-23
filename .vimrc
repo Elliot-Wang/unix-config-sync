@@ -447,6 +447,12 @@ noremap <C-f> :Lines<CR>
 let g:argtextobj_pairs="[:],(:),{:}"
 "}}}
 
+" fugitive
+" {{{
+nmap <Leader>bl :Git blame<CR>
+nmap <Leader>gl :Git log<CR>
+" }}}
+
 " gitgutter
 " {{{
 nmap ]h <Plug>(GitGutterNextHunk)
