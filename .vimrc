@@ -332,6 +332,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'chriszarate/yazi.vim'
 
 if has('win32') || has('win64')
     Plug 'preservim/nerdtree' |
@@ -436,12 +437,17 @@ let g:startify_session_autoload = 1
 "{{{
 noremap gt :Buffers<CR>
 noremap gm :Marks<CR>
-noremap gp :Jumps<CR>
-noremap go :Commands<CR>
-noremap <Leader>se :GFiles<CR>
+noremap gj :Jumps<CR>
+noremap go :GFiles<CR>
+noremap <C-p> :Commands<CR>
 noremap <C-f> :Lines<CR>
 "}}}
-"
+
+" yazi
+" {{{
+noremap <C-o> :YaziWorkingDirectory<CR>
+" }}}
+
 " argtextobj
 "{{{
 let g:argtextobj_pairs="[:],(:),{:}"
