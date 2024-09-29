@@ -34,6 +34,8 @@ function copy_list() {
             copy $second $first
         elif [[ $cmd == "debug" ]]; then
             echo copy $first $second
+        elif [[ $cmd == "diff" ]]; then
+            delta --features side-by-side $first $second
         else
             echo "unknow cmd"
             exit 1
@@ -77,6 +79,12 @@ if [ "$1" ]; then
         copy_list debug ${config_file[@]}
         if [[ "$os_name" == "Darwin" ]]; then
             copy_list debug ${mac_config_file[@]}
+        fi
+    elif [[ "diff" == "$1" ]]; then
+        echo "diff config"
+        copy_list diff ${config_file[@]}
+        if [[ "$os_name" == "Darwin" ]]; then
+            copy_list diff ${mac_config_file[@]}
         fi
     fi
 fi
