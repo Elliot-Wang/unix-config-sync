@@ -3,6 +3,7 @@ alias la="exa --icons --sort=ext --all"
 alias ll="exa --icons --sort=ext --long --header --grid"
 alias lla="exa --icons --sort=ext --long --header --grid --all"
 alias lt="exa --icons --sort=ext --tree --level=3 --color=always"
+alias ltd="exa --icons --sort=ext --tree --level=3 -D --color=always"
 alias llt="exa --icons --sort=ext --tree --level=3 --long --header --color=always"
 
 alias cat="bat"
@@ -40,4 +41,14 @@ function y() {
 		builtin cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
+}
+
+function fvim() {
+    rg --color=always --line-number --no-heading --smart-case "${*:-}" |
+      fzf --ansi \
+          --color "hl:-1:underline,hl+:-1:underline:reverse" \
+          --delimiter : \
+          --preview 'bat --color=always {1} --highlight-line {2}' \
+          --preview-window 'up,60%,border-bottom,+{2}+3/3,~3' \
+          --bind 'enter:become(vim {1} +{2})'
 }
