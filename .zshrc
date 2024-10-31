@@ -8,7 +8,7 @@ antigen use oh-my-zsh
 antigen theme ys
 
 # atuin
-antigen bundle atuinsh/atuin@main
+# antigen bundle atuinsh/atuin@main
 # forgit
 antigen bundle wfxr/forgit
 # Bundles from the default repo (robbyrussell's oh-my-zsh).

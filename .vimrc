@@ -23,6 +23,13 @@ set encoding=utf-8 nobomb
 filetype on
 syntax on
 
+" # Native autocompletion
+" {{{
+" Make Vim completion popup menu work just like in an IDE
+" set completeopt=longest,menuone
+" inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<C-g>u\<Tab>"
+" }}}
+
 " GUI
 "{{{
 colo desert
@@ -40,131 +47,6 @@ set noshowcmd
 set langmenu=zh_CN
 "}}}
 
-" Difference
-" {{{
-let s:isWin = has('win32') || has('win64')
-let s:enableCoc = 1
-" }}}
-
-" Coc Config
-if s:enableCoc 
-"{{{
-let g:coc_global_extensions = [
-	\ 'coc-vimlsp',
-    \ 'coc-gitignore',
-    \ 'coc-highlight',
-    \ 'coc-json',
-    \ 'coc-tabnine',
-    \ 'coc-yaml',
-    \ 'coc-diagnostic',
-	\ 'coc-lists',
-    \ ]
-if !s:isWin
-    call add(g:coc_global_extensions, 'coc-sh')
-    call add(g:coc_global_extensions, 'coc-explorer')
-endif
-if has('python3')
-    call add(g:coc_global_extensions, 'coc-snippets')
-endif
-
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-" Find symbol of current document.
-nnoremap <silent><nowait> go  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent><nowait> gs  :<C-u>CocList -I symbols<cr>
-" Symbol renaming.
-nmap <Leader>re <Plug>(coc-rename)
-" Coc Command
-" nnoremap <Leader>cm :CocCommand
-
-" Show documentation in preview window.
-nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-" Mappings for CoCList
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>dg  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>ex  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent><nowait> <space>cm  :<C-u>CocList commands<cr>
-
-" Do default action for next item.
-"nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-"nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-"nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-" Explorer
-let g:coc_explorer_global_presets = {
-\   '.vim': {
-\     'root-uri': '~/.vim',
-\   },
-\   'cocConfig': {
-\      'root-uri': '~/.config/coc',
-\   },
-\   'tab': {
-\     'position': 'tab',
-\     'quit-on-open': v:true,
-\   },
-\   'tab:$': {
-\     'position': 'tab:$',
-\     'quit-on-open': v:true,
-\   },
-\   'floating': {
-\     'position': 'floating',
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingTop': {
-\     'position': 'floating',
-\     'floating-position': 'center-top',
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingLeftside': {
-\     'position': 'floating',
-\     'floating-position': 'left-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'floatingRightside': {
-\     'position': 'floating',
-\     'floating-position': 'right-center',
-\     'floating-width': 50,
-\     'open-action-strategy': 'sourceWindow',
-\   },
-\   'simplify': {
-\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
-\   },
-\   'buffer': {
-\     'sources': [{'name': 'buffer', 'expand': v:true}]
-\   },
-\ }
-
-endif "---endif enableCoc---
-
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-"}}}
-
 " Format Indent
 "{{{
 " 自动添加缩进量, 智能添加缩进量
@@ -175,6 +57,110 @@ vnoremap < <gv
 vnoremap > >gv
 
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
+" Difference
+" {{{
+let s:isWin = has('win32') || has('win64')
+let s:enableCoc = 1
+" }}}
+
+" Coc Config
+"{{{
+if s:enableCoc 
+    let g:coc_global_extensions = [
+        \ 'coc-vimlsp',
+        \ 'coc-gitignore',
+        \ 'coc-highlight',
+        \ 'coc-json',
+        \ 'coc-yaml',
+        \ 'coc-diagnostic',
+        \ 'coc-lists',
+        \ 'coc-tabnine',
+        \ ]
+    if !s:isWin
+        call add(g:coc_global_extensions, 'coc-sh')
+        call add(g:coc_global_extensions, 'coc-explorer')
+    endif
+    " if has('python3')
+    "     call add(g:coc_global_extensions, 'coc-snippets')
+    " endif
+
+    " Use tab for trigger completion with characters ahead and navigate
+    " NOTE: There's always complete item selected by default, you may want to enable
+    " no select by `"suggest.noselect": true` in your configuration file
+    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+    " other plugin before putting this into your config
+    " 和X-mode的原生自动补全无法兼容
+    " inoremap <silent><expr> <TAB>
+    "       \ coc#pum#visible() ? coc#pum#next(1) :
+    "       \ CheckBackspace() ? "\<Tab>" :
+    "       \ coc#refresh()
+    " inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+    " Make <CR> to accept selected completion item or notify coc.nvim to format
+    " <C-g>u breaks current undo, please make your own choice
+    inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                                  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+    let g:coc_snippet_next = '<tab>'
+    " ----自动补全快捷键 tab, shift-tab, enter---- END
+
+    " Explorer
+    let g:coc_explorer_global_presets = {
+    \   '.vim': {
+    \     'root-uri': '~/.vim',
+    \   },
+    \   'cocConfig': {
+    \      'root-uri': '~/.config/coc',
+    \   },
+    \   'tab': {
+    \     'position': 'tab',
+    \     'quit-on-open': v:true,
+    \   },
+    \   'tab:$': {
+    \     'position': 'tab:$',
+    \     'quit-on-open': v:true,
+    \   },
+    \   'floating': {
+    \     'position': 'floating',
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingTop': {
+    \     'position': 'floating',
+    \     'floating-position': 'center-top',
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingLeftside': {
+    \     'position': 'floating',
+    \     'floating-position': 'left-center',
+    \     'floating-width': 50,
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'floatingRightside': {
+    \     'position': 'floating',
+    \     'floating-position': 'right-center',
+    \     'floating-width': 50,
+    \     'open-action-strategy': 'sourceWindow',
+    \   },
+    \   'simplify': {
+    \     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+    \   },
+    \   'buffer': {
+    \     'sources': [{'name': 'buffer', 'expand': v:true}]
+    \   },
+    \ }
+
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+endif "---endif enableCoc---
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+"}}}
+
 "}}}
  
 
@@ -192,8 +178,8 @@ endif
 
 " Save and exit
 "{{{
-noremap S :w<CR>
-noremap Q :bd<CR>
+nnoremap S :w<CR>
+nnoremap Q :bd<CR>
 
 nnoremap ZS :xa!<CR>
 nnoremap ZQ :qa!<CR>
@@ -213,12 +199,15 @@ nnoremap <C-k> gk
 
 " Copy and Paste
 "{{{
-vnoremap <C-c> "*y
 vnoremap Y "*y
 
-inoremap <C-v> <C-r>*
-" To insert unicode characters
-inoremap <C-b> <C-v>
+" nonsense in macos
+if s:isWin
+    vnoremap <C-c> "*y
+    inoremap <C-v> <C-r>*
+    " To insert unicode characters
+    inoremap <C-b> <C-v>
+endif
 "}}}
 
 " Move and Delete Lines
@@ -269,7 +258,6 @@ nnoremap tL :+tabnext<CR>	    " 到右边的选项卡
 " Find and Replace
 noremap \s :%s///g<left><left><left>
 vnoremap s y:s/<C-R>"//g<left><left>
-vnoremap S y:%s/<C-R>"//g<left><left>
 
 " Toggle search hightlight
 noremap <Leader>sl :set hls!<Bar>set hls?<CR>
@@ -333,6 +321,7 @@ Plug 'mhinz/vim-startify'
 Plug 'mbbill/undotree'
 Plug 'scrooloose/nerdcommenter'
 Plug 'chriszarate/yazi.vim'
+Plug 'nathangrigg/vim-beancount'
 
 if has('win32') || has('win64')
     Plug 'preservim/nerdtree' |
@@ -355,9 +344,15 @@ Plug 'vim-scripts/argtextobj.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'michaeljsmith/vim-indent-object'
 
+" Plug 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'chengzeyi/fzf-preview.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 " Plug 'guns/xterm-color-table.vim'
@@ -398,6 +393,68 @@ noremap <Leader>tu :UndotreeToggle<CR>
 
 " }}}
 
+"{{{
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Find symbol of current document.
+nnoremap <silent><nowait> gl  :CocList outline<CR>
+" Search workspace symbols.
+" nnoremap <silent><nowait> gs  :CocList -I symbols<cr>
+" Symbol renaming.
+nmap <Leader>re <Plug>(coc-rename)
+" Coc Command
+
+" " Use <C-l> for trigger snippet expand.
+" imap <C-l> <Plug>(coc-snippets-expand)
+"
+" " Use <C-j> for select text for visual placeholder of snippet.
+" vmap <C-j> <Plug>(coc-snippets-select)
+"
+" " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+" let g:coc_snippet_next = '<c-j>'
+"
+" " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+" let g:coc_snippet_prev = '<c-k>'
+"
+" " Use <C-j> for both expand and jump (make expand higher priority.)
+" imap <C-j> <Plug>(coc-snippets-expand-jump)
+"
+" " Use <leader>x for convert visual selected code to snippet
+" " xmap <leader>x  <Plug>(coc-convert-snippet)
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  " else
+    " call feedkeys('K', 'in')
+  endif
+endfunction
+
+" Show documentation in preview window.
+nnoremap <silent> <C-q> :call ShowDocumentation()<CR>
+
+" Mappings for CoCList
+" Show all diagnostics.
+" nnoremap <silent><nowait> <space>dg  :CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent><nowait> <Leader>ex  :CocList extensions<CR>
+" Show commands.
+" nnoremap <silent><nowait> <Leader>cm  :CocList commands<cr>
+nnoremap <silent><nowait> <Leader>cm  :CocList<CR>
+
+" Do default action for next item.
+" nnoremap <silent><nowait> <Leader>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+" nnoremap <silent><nowait> <Leader>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+" nnoremap <silent><nowait> <Leader>p  :<C-u>CocListResume<CR>
+
+"}}}
+
+
 " Startify Setting
 " {{{
 nnoremap <Leader>st :Startify<CR>
@@ -434,18 +491,24 @@ let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
 
 " FZF
+" Most commands support CTRL-T / CTRL-X / CTRL-V key bindings to open 
+" in a new tab, a new split, or in a new vertical split
 "{{{
-noremap gt :Buffers<CR>
-noremap gm :Marks<CR>
-noremap gj :Jumps<CR>
-noremap go :GFiles<CR>
-noremap <C-p> :Commands<CR>
-noremap <C-f> :Lines<CR>
+nnoremap gt :Buffers<CR>
+nnoremap gm :FZFMarks<CR>
+nnoremap g' :Jumps<CR>
+nnoremap go :History<CR>
+nnoremap <C-p> :Commands<CR>
+" current buffer
+nnoremap <C-f> :FZFBLines<CR>   
+
+" all buffers
+" nnoremap <C-S-f> :Lines<CR>
 "}}}
 
 " yazi
 " {{{
-noremap <C-o> :YaziWorkingDirectory<CR>
+nnoremap <C-o> :YaziWorkingDirectory<CR>
 " }}}
 
 " argtextobj
@@ -464,9 +527,10 @@ nmap <Leader>gl :Git log<CR>
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 
-nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
-nmap <Leader>hs <Plug>(GitGutterStageHunk)
-nmap <Leader>hu <Plug>(GitGutterUndoHunk)
+" conflict with leader+h (move to left windows)
+" nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
+" nmap <Leader>hs <Plug>(GitGutterStageHunk)
+" nmap <Leader>hu <Plug>(GitGutterUndoHunk)
 " }}}
 
 " vim-easy-align
@@ -513,26 +577,26 @@ let airline#extensions#tabline#ignore_bufadd_pat =
 let g:airline#extensions#wordcount#filetypes =
             \ ['asciidoc', 'help', 'mail', 'nroff', 'org', 'plaintex', 'rst', 'tex', 'text']
 let g:airline#extensions#wordcount#formatter = 'default'
-let g:airline_mode_map = {
-  \ '__'     : '-',
-  \ 'c'      : 'Cm',
-  \ 'i'      : 'Is',
-  \ 'ic'     : 'Ic',
-  \ 'ix'     : 'Ix',
-  \ 'n'      : 'Nm',
-  \ 'multi'  : 'Mt',
-  \ 'ni'     : 'Ni',
-  \ 'no'     : 'No',
-  \ 'R'      : 'Rp',
-  \ 'Rv'     : 'Rv',
-  \ 's'      : 'S',
-  \ 'S'      : 'S',
-  \ ''     : 'S',
-  \ 't'      : 'T',
-  \ 'v'      : 'Vs',
-  \ 'V'      : 'Vl',
-  \ ''     : 'Vb',
-  \ }
+" let g:airline_mode_map = {
+"   \ '__'     : '-',
+"   \ 'c'      : 'Cm',
+"   \ 'i'      : 'Is',
+"   \ 'ic'     : 'Ic',
+"   \ 'ix'     : 'Ix',
+"   \ 'n'      : 'Nm',
+"   \ 'multi'  : 'Mt',
+"   \ 'ni'     : 'Ni',
+"   \ 'no'     : 'No',
+"   \ 'R'      : 'Rp',
+"   \ 'Rv'     : 'Rv',
+"   \ 's'      : 'S',
+"   \ 'S'      : 'S',
+"   \ ''     : 'S',
+"   \ 't'      : 'T',
+"   \ 'v'      : 'Vs',
+"   \ 'V'      : 'Vl',
+"   \ ''     : 'Vb',
+"   \ }
 set laststatus=2
 "}}}
 
