@@ -1,29 +1,59 @@
-alias ls="exa --icons --sort=ext"
-alias la="exa --icons --sort=ext --all"
-alias ll="exa --icons --sort=ext --long --header --grid"
-alias lla="exa --icons --sort=ext --long --header --grid --all"
-alias lt="exa --icons --sort=ext --tree --level=3 --color=always"
-alias ltd="exa --icons --sort=ext --tree --level=3 -D --color=always"
-alias llt="exa --icons --sort=ext --tree --level=3 --long --header --color=always"
+if which exa > /dev/null; then
+  alias ls="exa --icons --sort=ext"
+  alias la="exa --icons --sort=ext --all"
+  alias ll="exa --icons --sort=ext --long --header"
+  alias lla="exa --icons --sort=ext --long --header --all"
+  alias lt="exa --icons --sort=ext --tree --level=3 --color=always"
+  alias ltd="exa --icons --sort=ext --tree --level=3 -D --color=always"
+  alias llt="exa --icons --sort=ext --tree --level=3 --long --header --color=always"
+fi
 
-alias cat="bat"
-export BAT_THEME="OneHalfDark"
-# a colorizing pager for man
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+if which curlie > /dev/null; then 
+  alias curl="curlie";
+fi
 
-# global aliases to override --help
-#alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+if which lazygit > /dev/null; then 
+  alias lg="lazygit"
+fi
 
-# you can do $ help cp or $ help git commit
-alias bathelp='bat --plain --language=help'
-help() {
-    "$@" --help 2>&1 | bathelp
-}
+if which nvim > /dev/null; then 
+  alias vim="nvim"
+fi
 
-# When set to 1, z will print the matched directory before navigating to it
-export _ZO_ECHO="1"
-eval "$(zoxide init zsh)"
-alias cd="z"
+if which bat > /dev/null; then 
+  alias cat="bat"
+  export BAT_THEME="OneHalfDark"
+  # a colorizing pager for man
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+  # global aliases to override --help
+  #alias -g -- --help='--help 2>&1 | bat --language=help --style=plain'
+
+  # you can do $ help cp or $ help git commit
+  alias bathelp='bat --plain --language=help'
+  help() {
+      "$@" --help 2>&1 | bathelp
+  }
+fi
+
+if which zoxide > /dev/null; then
+  # When set to 1, z will print the matched directory before navigating to it
+  export _ZO_ECHO="1"
+  eval "$(zoxide init zsh)"
+  alias cd="z"
+fi
+
+if which yazi > /dev/null; then
+  function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+      builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+  }
+fi
+
 
 # Set up fzf key bindings and fuzzy completion
 # source <(fzf --zsh)
@@ -80,15 +110,6 @@ _fzf_comprun() {
 export FORGIT_FZF_DEFAULT_OPTS="--exact --border --cycle --reverse --height '80%'"
 
 [ -f $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh ] && source $HOMEBREW_PREFIX/share/forgit/forgit.plugin.zsh
-
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
-}
 
 function fvim() {
     rg --color=always --line-number --no-heading --smart-case "${*:-}" |
