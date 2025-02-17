@@ -19,9 +19,11 @@ function copy() {
 }
 
 function copy_list() {
+    setopt localoptions noglob  # 禁用模式匹配
     cmd=$1
     len=$#
-    local my_array=("$@")
+
+    my_array=(${@})
     declare -i i=0
 
     while [ "$len" -gt "$((2*i+1))" ]; do
@@ -34,8 +36,9 @@ function copy_list() {
             copy $second $first
         elif [[ $cmd == "debug" ]]; then
             echo copy $first $second
-        elif [[ $cmd == "diff" ]]; then
-            delta --features side-by-side $first $second
+        elif [[ $cmd == "CMD_diff" ]]; then
+            which delta > /dev/null 2>&1 && delta --features side-by-side $first $second \
+                || git diff --no-index $first $second
         else
             echo "unknow cmd"
             exit 1
@@ -82,7 +85,7 @@ if [ "$1" ]; then
         fi
     elif [[ "diff" == "$1" ]]; then
         echo "diff config"
-        copy_list diff ${config_file[@]}
+        copy_list CMD_diff ${config_file[@]}
         if [[ "$os_name" == "Darwin" ]]; then
             copy_list diff ${mac_config_file[@]}
         fi

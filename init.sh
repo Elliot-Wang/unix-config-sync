@@ -125,12 +125,15 @@ if [[ "$os_name" == "Darwin" ]]; then
     if ! which cargo > /dev/null; then
         brew install rust
     fi
-    # ls alter
-    if ! which exa > /dev/null; then
-        cargo install exa
-    fi
 
     for element in "${arr[@]}"; do
+        # ls alter
+        if [[ "$element" == "exa" ]]; then
+            if ! which exa > /dev/null; then
+                cargo install exa
+            fi
+        fi
+
         # diff alter
         if [[ "$element" == "delta" ]]; then
             if ! which delta > /dev/null; then
@@ -159,3 +162,41 @@ if [[ "$os_name" == "Darwin" ]]; then
 
 fi
 
+if [[ "$os_name" == "redhat" ]]; then
+    for element in "${arr[@]}"; do
+
+        # cd alter
+        if [[ "$element" == "zoxide" ]]; then
+            if ! which zoxide > /dev/null; then
+                dnf install zoxide
+            fi
+        fi
+
+        # ls alter
+        if [[ "$element" == "exa" ]]; then
+            if ! which exa > /dev/null; then
+            fi
+        fi
+
+        # diff alter
+        if [[ "$element" == "delta" ]]; then
+            if ! which delta > /dev/null; then
+            fi
+        fi
+        # find alter
+        if [[ "$element" == "fd" ]]; then
+            if ! which fd > /dev/null; then
+            fi
+        fi
+        # sed alter
+        if [[ "$element" == "sd" ]]; then
+            if ! which sd > /dev/null; then
+            fi
+        fi
+        # git grep alter
+        if [[ "$element" == "ripgrep" ]]; then
+            if ! which rg > /dev/null; then
+            fi
+        fi
+    done
+fi
