@@ -46,11 +46,20 @@ hi ColorColumn guibg=grey
 set noshowcmd
 set langmenu=zh_CN
 
+" 实时搜索结果预览
+set incsearch
+
+" 使用 ripgrep 作为 grep 程序（如果已安装）
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m
+endif
+
 " 保存折叠状态
 augroup remember_folds
   autocmd!
-  autocmd BufWinLeave * mkview
-  autocmd BufWinEnter * silent! loadview
+  autocmd BufWinLeave * if expand('%') != '' | mkview | endif
+  autocmd BufWinEnter * if expand('%') != '' | silent! loadview | endif
 augroup END
 
 " 离开插入模式时自动保存
