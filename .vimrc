@@ -45,6 +45,35 @@ hi ColorColumn guibg=grey
 
 set noshowcmd
 set langmenu=zh_CN
+
+" 实时搜索结果预览
+set incsearch
+
+" 使用 ripgrep 作为 grep 程序（如果已安装）
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m
+endif
+
+" 保存折叠状态
+augroup remember_folds
+  autocmd!
+  autocmd BufWinLeave * if expand('%') != '' | mkview | endif
+  autocmd BufWinEnter * if expand('%') != '' | silent! loadview | endif
+augroup END
+
+" 离开插入模式时自动保存
+autocmd InsertLeave * if &modified && !&readonly | update | endif
+" 窗口失去焦点时自动保存
+autocmd FocusLost * if &modified && !&readonly | update | endif
+
+" 自动保存会话
+augroup auto_session
+  autocmd!
+  autocmd VimLeave * execute 'mksession! ~/.vim/sessions/last.vim'
+augroup END
+" 快捷键加载上次会话
+nnoremap <Leader>ss :source ~/.vim/sessions/last.vim<CR>
 "}}}
 
 " Format Indent
@@ -56,7 +85,13 @@ set ts=4 sts=4 sw=4 et
 vnoremap < <gv
 vnoremap > >gv
 
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 et
+" 为不同文件类型设置不同的缩进
+augroup file_types
+  autocmd!
+  autocmd FileType javascript,typescript,html,css,yaml setlocal ts=2 sts=2 sw=2
+  autocmd FileType python setlocal ts=4 sts=4 sw=4
+  autocmd FileType markdown setlocal wrap linebreak
+augroup END
 " Difference
 " {{{
 let s:isWin = has('win32') || has('win64')
@@ -199,7 +234,11 @@ nnoremap <C-k> gk
 
 " Copy and Paste
 "{{{
-vnoremap Y "*y
+" vnoremap Y "*y
+" 系统剪贴板集成
+set clipboard=unnamed,unnamedplus
+" Toggle copy/paste mode
+noremap <Leader>cv :set rnu! nonu! paste!<CR>
 
 " nonsense in macos
 if s:isWin
@@ -261,8 +300,6 @@ vnoremap s y:s/<C-R>"//g<left><left>
 
 " Toggle search hightlight
 noremap <Leader>sl :set hls!<Bar>set hls?<CR>
-" Toggle copy/paste mode
-noremap <Leader>cv :set rnu! nonu! paste!<CR>
 
 " Buffers
 "{{{
@@ -460,9 +497,10 @@ nnoremap <silent><nowait> <Leader>cm  :CocList<CR>
 nnoremap <Leader>st :Startify<CR>
 
 let g:startify_lists = [
-     \ { 'type': 'sessions'           , 'header': ['   Sessions'  ] } ,
-     \ { 'type': 'bookmarks'          , 'header': ['   Bookmarks' ] } ,
-     \ { 'type': 'files'              , 'header': ['   File'      ] } ,
+     \ { 'type': 'commands',  'header': ['   Commands'   ] } ,
+     \ { 'type': 'sessions',  'header': ['   Sessions'  ] } ,
+     \ { 'type': 'bookmarks', 'header': ['   Bookmarks' ] } ,
+     \ { 'type': 'files',     'header': ['   File'      ] } ,
      \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
      \ ]
 
@@ -486,6 +524,10 @@ let g:startify_skiplist = [
        \ '/project/.*/documentation',
        \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
        \ ]
+
+let g:startify_commands = [
+    \ {'sl': ['Load Latest Session', 'silent! source ~/.vim/sessions/last.vim']},
+    \ ]
 
 let g:startify_session_persistence = 1
 let g:startify_session_autoload = 1
