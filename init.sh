@@ -6,7 +6,7 @@ test -f /etc/redhat-release && os_name="redhat"
 test -f /etc/debian_version && os_name="debian"
 
 # vim篇
-if ! which vim > /dev/null; then
+if ! which vim > /dev/null 2>&1; then
     echo "No Vim installed..."
     case $os_name in
       redhat)
@@ -43,7 +43,7 @@ case $os_name in
 esac
 
 # zsh篇
-if ! which zsh > /dev/null; then
+if ! which zsh > /dev/null 2>&1; then
     echo "No zsh installed..."
     case $os_name in
       redhat)
@@ -64,7 +64,7 @@ cp .zshrc ~/.zshrc
 { test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*.zsh; do cp $file ~/$file; done
 
 # neofetch篇
-if ! which neofetch > /dev/null; then
+if ! which neofetch > /dev/null 2>&1; then
     echo "No neofetch installed..."
     case $os_name in
       redhat)
@@ -89,7 +89,7 @@ fi
 [ -f ~/.config/neofetch/config.conf ] || mkdir -p ~/.config/neofetch && cp neofetch/config.conf ~/.config/neofetch
 
 # ranger
-if ! which ranger > /dev/null; then
+if ! which ranger > /dev/null 2>&1; then
     echo "No ranger installed..."
     case $os_name in
       redhat|debian|Darwin)
@@ -113,48 +113,48 @@ if [[ "$os_name" == "Darwin" ]]; then
     # no override config
     test -e ~/.zsh/alter.zsh || cp ./.zsh/alter.zsh.mac ~/.zsh/alter.zsh
     # cat alter
-    if ! which bat > /dev/null; then
+    if ! which bat > /dev/null 2>&1; then
         brew install bat
     fi
     # cd alter
-    if ! which zoxide > /dev/null; then
+    if ! which zoxide > /dev/null 2>&1; then
         brew install zoxide
     fi
 
     # install cargo
-    if ! which cargo > /dev/null; then
+    if ! which cargo > /dev/null 2>&1; then
         brew install rust
     fi
 
     for element in "${arr[@]}"; do
         # ls alter
         if [[ "$element" == "exa" ]]; then
-            if ! which exa > /dev/null; then
+            if ! which exa > /dev/null 2>&1; then
                 cargo install exa
             fi
         fi
 
         # diff alter
         if [[ "$element" == "delta" ]]; then
-            if ! which delta > /dev/null; then
+            if ! which delta > /dev/null 2>&1; then
                 brew install git-delta
             fi
         fi
         # find alter
         if [[ "$element" == "fd" ]]; then
-            if ! which fd > /dev/null; then
+            if ! which fd > /dev/null 2>&1; then
                 brew install fd
             fi
         fi
         # sed alter
         if [[ "$element" == "sd" ]]; then
-            if ! which sd > /dev/null; then
+            if ! which sd > /dev/null 2>&1; then
                 cargo install sd
             fi
         fi
         # git grep alter
         if [[ "$element" == "ripgrep" ]]; then
-            if ! which rg > /dev/null; then
+            if ! which rg > /dev/null 2>&1; then
                 brew install ripgrep
             fi
         fi
@@ -167,35 +167,35 @@ if [[ "$os_name" == "redhat" ]]; then
 
         # cd alter
         if [[ "$element" == "zoxide" ]]; then
-            if ! which zoxide > /dev/null; then
+            if ! which zoxide > /dev/null 2>&1; then
                 dnf install zoxide
             fi
         fi
 
         # ls alter
         if [[ "$element" == "exa" ]]; then
-            if ! which exa > /dev/null; then
+            if ! which exa > /dev/null 2>&1; then
             fi
         fi
 
         # diff alter
         if [[ "$element" == "delta" ]]; then
-            if ! which delta > /dev/null; then
+            if ! which delta > /dev/null 2>&1; then
             fi
         fi
         # find alter
         if [[ "$element" == "fd" ]]; then
-            if ! which fd > /dev/null; then
+            if ! which fd > /dev/null 2>&1; then
             fi
         fi
         # sed alter
         if [[ "$element" == "sd" ]]; then
-            if ! which sd > /dev/null; then
+            if ! which sd > /dev/null 2>&1; then
             fi
         fi
         # git grep alter
         if [[ "$element" == "ripgrep" ]]; then
-            if ! which rg > /dev/null; then
+            if ! which rg > /dev/null 2>&1; then
             fi
         fi
     done
