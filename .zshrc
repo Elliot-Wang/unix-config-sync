@@ -42,11 +42,15 @@ function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
 # async-prompt is experimental feature and disabled for stable
 zstyle ':omz:alpha:lib:git' async-prompt no
 
-alias neo="neofetch"
-alias ra="ranger"
+if which neofetch > /dev/null 2>&1; then
+    alias neo="neofetch"
+    if [ ! $TERM_PROGRAM = 'vscode' ]; then
+        neofetch
+    fi
+fi
 
-if [ ! $TERM_PROGRAM = 'vscode' ]; then
-    neofetch
+if which ranger > /dev/null 2>&1; then
+    alias ra="ranger"
 fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
