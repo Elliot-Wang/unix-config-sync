@@ -4,6 +4,7 @@ function copy() {
     if [ -f $1 ] && [ -f $2 ]; then
         cmp --silent $1 $2
         if [ ! $? -eq 0 ]; then
+            show_diff $1 $2
             echo "update $2 [y/N]"
             read opt
 
@@ -14,6 +15,16 @@ function copy() {
                 *)
                     ;;
             esac
+        fi
+    fi
+}
+
+function show_diff() {
+    if [ -f $1 ] && [ -f $2 ]; then
+        cmp --silent $1 $2
+        if [ ! $? -eq 0 ]; then
+            which delta > /dev/null 2>&1 && delta --features side-by-side $first $second \
+                || git diff --no-index $first $second
         fi
     fi
 }
@@ -37,8 +48,7 @@ function copy_list() {
         elif [[ $cmd == "debug" ]]; then
             echo copy $first $second
         elif [[ $cmd == "CMD_diff" ]]; then
-            which delta > /dev/null 2>&1 && delta --features side-by-side $first $second \
-                || git diff --no-index $first $second
+            show_diff $first $second
         else
             echo "unknow cmd"
             exit 1

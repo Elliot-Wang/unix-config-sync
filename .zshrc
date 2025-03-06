@@ -15,6 +15,7 @@ antigen bundle wfxr/forgit
 antigen bundle git
 antigen bundle heroku
 antigen bundle pip
+
 antigen bundle lein
 antigen bundle command-not-found
 
@@ -36,8 +37,6 @@ elif [ $TERM = 'tmux' ] && [ -e /usr/share/terminfo/t/tmux-256color ]; then
     export TERM='tmux-256color'
 fi
 
-function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
-
 # My Config
 # async-prompt is experimental feature and disabled for stable
 zstyle ':omz:alpha:lib:git' async-prompt no
@@ -50,6 +49,7 @@ if which neofetch > /dev/null 2>&1; then
 fi
 
 if which ranger > /dev/null 2>&1; then
+    function ranger () { command ranger "$@"; echo -e "\e[?25h"; }
     alias ra="ranger"
 fi
 

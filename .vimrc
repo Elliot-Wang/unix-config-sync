@@ -23,6 +23,8 @@ set encoding=utf-8 nobomb
 filetype on
 syntax on
 
+let mapleader=" "
+
 " # Native autocompletion
 " {{{
 " Make Vim completion popup menu work just like in an IDE
@@ -72,6 +74,7 @@ augroup auto_session
   autocmd!
   autocmd VimLeave * execute 'mksession! ~/.vim/sessions/last.vim'
 augroup END
+
 " 快捷键加载上次会话
 nnoremap <Leader>ss :source ~/.vim/sessions/last.vim<CR>
 "}}}
@@ -96,6 +99,7 @@ augroup END
 " {{{
 let s:isWin = has('win32') || has('win64')
 let s:enableCoc = 1
+
 " }}}
 
 " Coc Config
@@ -109,8 +113,8 @@ if s:enableCoc
         \ 'coc-yaml',
         \ 'coc-diagnostic',
         \ 'coc-lists',
-        \ 'coc-tabnine',
         \ ]
+        " \ 'coc-tabnine',
     if !s:isWin
         call add(g:coc_global_extensions, 'coc-sh')
         call add(g:coc_global_extensions, 'coc-explorer')
@@ -203,8 +207,6 @@ endfunction
 "             Mappings                  " 
 """""""""""""""""""""""""""""""""""""""""
 "{{{
-let mapleader=" "
-
 if s:isWin
     noremap <Leader>rc :source ~/_vimrc<CR>
 else
@@ -259,23 +261,19 @@ nnoremap dD "_dd
 " Split Windows
 "{{{
 nnoremap s <nop>
-nnoremap sk :set splitbelow<CR>:split<CR>		" 下分屏
-nnoremap sj :set nosplitbelow<CR>:split<CR>		" 上分屏
-nnoremap sl :set nosplitright<CR>:vsplit<CR>	" 右分屏
-nnoremap sh :set splitright<CR>:vsplit<CR>		" 左分屏
-nnoremap sL <C-W>L 	                    " 左右分屏换竖向分屏
-nnoremap sK <C-W>K 	                    " 竖向分屏换左右分屏
-nnoremap sJ <C-W>J		                " 竖向分屏换左右分屏
-nnoremap sH <C-W>H		                " 左右分屏换竖向分屏
-nnoremap sc <C-W>c                              " 关闭当前分屏
+nnoremap sK :set splitbelow<CR>:split<CR><C-W>j    " 下分屏
+nnoremap sJ :set nosplitbelow<CR>:split<CR><C-W>k  " 上分屏
+nnoremap sL :set nosplitright<CR>:vsplit<CR><C-W>l " 右分屏
+nnoremap sH :set splitright<CR>:vsplit<CR><C-W>h   " 左分屏
+nnoremap sc <C-W>c                                 " 关闭当前分屏
 "}}}
 
 " Move to Windows
 "{{{
-nnoremap <Leader>k <C-W>k	" 光标到上屏
-nnoremap <Leader>j <C-W>j	" 光标到下屏
-nnoremap <Leader>h <C-W>h	" 光标到左屏
-nnoremap <Leader>l <C-W>l	" 光标到右屏
+nnoremap sk <C-W>k	" 光标到上屏
+nnoremap sj <C-W>j	" 光标到下屏
+nnoremap sh <C-W>h	" 光标到左屏
+nnoremap sl <C-W>l	" 光标到右屏
 "}}}
 
 " Resize Windows
@@ -578,7 +576,7 @@ nmap [h <Plug>(GitGutterPrevHunk)
 " vim-easy-align
 "{{{
 " Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
+xmap ga :EasyAlign<SPACE>
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 "}}}
