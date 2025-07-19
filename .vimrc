@@ -98,7 +98,7 @@ augroup END
 " Difference
 " {{{
 let s:isWin = has('win32') || has('win64')
-let s:enableCoc = 1
+let s:enableCoc = 0
 
 " }}}
 
