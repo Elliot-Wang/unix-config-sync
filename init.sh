@@ -26,12 +26,15 @@ fi
 # onedark.vim
 cp -r vim/onedark.vim/* ~/.vim
 cp .vimrc ~/.vimrc
+# disable coc at start
+sed -i 's/enableCoc = 1/enableCoc = 0/' ~/.vimrc
 # dnf and nodejs
 case $os_name in
     redhat)
         sudo yum install -y dnf
         sudo dnf install -y nodejs npm
-        sudo dnf -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
+	sudo dnf install -y zsh
+        #sudo dnf -y install https://packages.endpointdev.com/rhel/7/os/x86_64/endpoint-repo.x86_64.rpm
         sudo dnf upgrade -y git
         ;;
     debian)
@@ -43,6 +46,7 @@ case $os_name in
 esac
 
 # zsh篇
+# chsh -s $(which zsh)
 if ! which zsh > /dev/null 2>&1; then
     echo "No zsh installed..."
     case $os_name in
@@ -175,27 +179,32 @@ if [[ "$os_name" == "redhat" ]]; then
         # ls alter
         if [[ "$element" == "exa" ]]; then
             if ! which exa > /dev/null 2>&1; then
+                echo "no implement install exa"
             fi
         fi
 
         # diff alter
         if [[ "$element" == "delta" ]]; then
             if ! which delta > /dev/null 2>&1; then
+                echo "no implement install delta"
             fi
         fi
         # find alter
         if [[ "$element" == "fd" ]]; then
             if ! which fd > /dev/null 2>&1; then
+                echo "no implement install fd"
             fi
         fi
         # sed alter
         if [[ "$element" == "sd" ]]; then
             if ! which sd > /dev/null 2>&1; then
+                echo "no implement install sd"
             fi
         fi
         # git grep alter
         if [[ "$element" == "ripgrep" ]]; then
             if ! which rg > /dev/null 2>&1; then
+                echo "no implement install ripgrep"
             fi
         fi
     done
