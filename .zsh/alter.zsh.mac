@@ -37,10 +37,13 @@ if which bat > /dev/null; then
 fi
 
 if which zoxide > /dev/null; then
-  # When set to 1, z will print the matched directory before navigating to it
-  export _ZO_ECHO="1"
-  eval "$(zoxide init zsh)"
-  alias cd="z"
+  # https://github.com/anthropics/claude-code/issues/2632
+  if [[ "$CLAUDECODE" != "1" ]]; then
+    # When set to 1, z will print the matched directory before navigating to it
+    export _ZO_ECHO="1"
+    eval "$(zoxide init zsh)"
+    alias cd="z"
+  fi
 fi
 
 if which yazi > /dev/null; then
