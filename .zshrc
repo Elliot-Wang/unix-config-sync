@@ -38,6 +38,9 @@ elif [ $TERM = 'tmux' ] && [ -e /usr/share/terminfo/t/tmux-256color ]; then
 fi
 
 # My Config
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+
 # async-prompt is experimental feature and disabled for stable
 zstyle ':omz:alpha:lib:git' async-prompt no
 
