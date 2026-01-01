@@ -114,8 +114,12 @@ opt=("")
 
 # alter to native cmd
 if [[ "$os_name" == "Darwin" ]]; then
+    brew install maccy
+    brew install --cask ghostty
+
     # no override config
     test -e ~/.zsh/alter.zsh || cp ./.zsh/alter.zsh.mac ~/.zsh/alter.zsh
+
     # cat alter
     if ! which bat > /dev/null 2>&1; then
         brew install bat
