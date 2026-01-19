@@ -60,5 +60,7 @@ fi
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
-if which pyenv > /dev/null 2>&1; then eval "$(pyenv init -)"; fi
-if which pyenv-virtualenv-init > /dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
+# pyenv - deprecated, recommend using uv for Python version management
+# see: https://docs.astral.sh/uv/
+# if which pyenv > /dev/null 2>&1; then eval "$(pyenv init -)"; fi
+# if which pyenv-virtualenv-init > /dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
