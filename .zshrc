@@ -1,3 +1,6 @@
+# 自动补全路径 (必须放在 antigen 加载 oh-my-zsh 之前)
+fpath=(~/.zsh/completions $fpath)
+
 # antigen
 source ~/.antigen/antigen.zsh
 

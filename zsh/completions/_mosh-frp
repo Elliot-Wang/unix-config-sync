@@ -1,0 +1,31 @@
+#compdef mosh-frp.sh mosh-wacMac
+
+_mosh-frp() {
+    local state
+    local -a sessions
+
+    # 定义参数规则：-p 参数，以及位置参数 session
+    _arguments \
+        '-p[不执行 tmux，直接进入原生 shell]' \
+        '1: :->session'
+
+    case $state in
+        session)
+            # 动态获取 tmux session 列表
+            # -q 静默模式，ConnectTimeout=2 防止网络断开时按 Tab 导致终端永久卡死
+            # tmux ls -F '#S' 只输出会话名称
+            # 【修复】使用 tmux 的绝对路径
+            sessions=($(ssh -q -o ConnectTimeout=2 frp-wacMac "/opt/homebrew/bin/tmux ls -F '#S' 2>/dev/null"))
+            
+            if [[ ${#sessions[@]} -gt 0 ]]; then
+                _describe '活跃的 Tmux 会话' sessions
+            else
+                _message "未找到活跃会话 (或 SSH 响应超时)"
+            fi
+            ;;
+    esac
+}
+
+# 绑定补全函数到你的脚本和别名上
+compdef _mosh-frp mosh-frp.sh
+compdef _mosh-frp mosh-wacMac
