@@ -34,7 +34,7 @@ This is a Unix configuration synchronization repository that manages dotfiles an
 
 The core sync mechanism is in `sync.zsh`, which provides bidirectional sync between system configs and the repository:
 
-- **Managed Files**: `.vimrc`, `.zshrc`, neofetch config, oh-my-zsh git plugin
+- **Managed Files**: `.vimrc`, `.zshrc`, `.tmux.conf`, neofetch config, oh-my-zsh git plugin
 - **Platform-specific**: macOS configs stored in `.zsh/alter.zsh.mac`
 - **Sync Logic**: Uses `cmp` to detect changes before prompting for updates
 
@@ -54,6 +54,7 @@ The core sync mechanism is in `sync.zsh`, which provides bidirectional sync betw
 ├── neofetch/         # Neofetch system info display config
 ├── .vimrc            # Vim configuration
 ├── .zshrc            # Zsh configuration (antigen-based)
+├── .tmux.conf         # Tmux configuration
 ├── git_func.zsh      # Git helper functions (fshow, fbr, fco_preview)
 └── sync.zsh          # Bidirectional config sync tool
 ```

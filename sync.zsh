@@ -63,6 +63,7 @@ function copy_list() {
 config_file=( \
  ~/.vimrc .vimrc \
  ~/.zshrc .zshrc \
+ ~/.tmux.conf .tmux.conf \
  ~/.config/neofetch/config.conf neofetch \
  ~/.antigen/bundles/robbyrussell/oh-my-zsh/plugins/git/git.plugin.zsh zsh/git.plugin.zsh
 )

@@ -67,6 +67,9 @@ fi
 cp .zshrc ~/.zshrc
 { test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*.zsh; do cp $file ~/$file; done
 
+# tmux篇
+cp .tmux.conf ~/.tmux.conf
+
 # neofetch篇
 if ! which neofetch > /dev/null 2>&1; then
     echo "No neofetch installed..."
