@@ -65,7 +65,7 @@ fi
 # 使用antigen管理插件
 [ -f ~/.antigen/antigen.zsh ] || mkdir -p ~/.antigen && cp zsh/antigen.zsh ~/.antigen
 cp .zshrc ~/.zshrc
-{ test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null } && for file in .zsh/*.zsh; do cp $file ~/$file; done
+{ test -d ~/.zsh || mkdir ~/.zsh 2> /dev/null; } && for file in .zsh/*.zsh; do cp $file ~/$file; done
 
 # tmux篇
 cp .tmux.conf ~/.tmux.conf
