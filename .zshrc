@@ -43,15 +43,20 @@ fi
 # My Config
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
+export COLORTERM="truecolor"
+# 替换原来的 fg=240，直接硬编码 HEX 色值
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#5c5c5c"
+
+export EDITOR='nvim'
 
 # async-prompt is experimental feature and disabled for stable
 zstyle ':omz:alpha:lib:git' async-prompt no
 
 if which neofetch > /dev/null 2>&1; then
     alias neo="neofetch"
-    if [ ! $TERM_PROGRAM = 'vscode' ]; then
-        neofetch
-    fi
+    #if [ ! $TERM_PROGRAM = 'vscode' ]; then
+        # neofetch
+    #fi
 fi
 
 if which ranger > /dev/null 2>&1; then
@@ -67,3 +72,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # see: https://docs.astral.sh/uv/
 # if which pyenv > /dev/null 2>&1; then eval "$(pyenv init -)"; fi
 # if which pyenv-virtualenv-init > /dev/null 2>&1; then eval "$(pyenv virtualenv-init -)"; fi
+
+# OpenClaw Completion
+source "/Users/wangweiyu/.openclaw/completions/openclaw.zsh"
+export PATH="$HOME/.local/bin:$PATH"

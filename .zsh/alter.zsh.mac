@@ -1,3 +1,5 @@
+alias git-pigeon="python3 ~/code/python-projects/git-pigeon/workflow.py"
+
 if which exa > /dev/null; then
   alias ls="exa --icons --sort=ext"
   alias la="exa --icons --sort=ext --all"

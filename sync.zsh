@@ -56,6 +56,8 @@ function copy_list() {
 
         ((i++))
     done
+
+    return 0
 }
 
 
