@@ -1,0 +1,25 @@
+$ErrorActionPreference = "Stop"
+
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+    throw "unix-sync: winget is required for Windows application distribution"
+}
+
+$packages = @(
+{{ range (index .packageSpecs "windows") -}}
+    @{ Name = "{{ .name }}"; Version = "{{ .version }}" }
+{{ end -}}
+{{ range (index .packageSpecs "windowsDesktop") -}}
+    @{ Name = "{{ .name }}"; Version = "{{ .version }}" }
+{{ end -}}
+)
+
+foreach ($package in $packages) {
+    $arguments = @("install", "--id", $package.Name, "--exact", "--source", "winget", "--accept-package-agreements", "--accept-source-agreements", "--disable-interactivity")
+    if ($package.Version -ne "latest") {
+        $arguments += @("--version", $package.Version)
+    }
+    & winget @arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "unix-sync: winget failed to install $($package.Name) at desired version $($package.Version)"
+    }
+}

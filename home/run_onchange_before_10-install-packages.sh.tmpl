@@ -1,0 +1,78 @@
+#!/bin/sh
+set -eu
+
+as_root() {
+  if [ "$(id -u)" -eq 0 ]; then
+    "$@"
+  elif command -v sudo >/dev/null 2>&1; then
+    sudo "$@"
+  else
+    echo "unix-sync: sudo is required to install system packages" >&2
+    return 1
+  fi
+}
+
+{{ if eq .chezmoi.os "darwin" -}}
+if ! command -v brew >/dev/null 2>&1; then
+  echo "unix-sync: installing Homebrew"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [ -x /opt/homebrew/bin/brew ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [ -x /usr/local/bin/brew ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+{{ range (index .packageSpecs "darwin") -}}
+{{ if eq .version "latest" -}}
+brew install {{ .name }}
+{{ else -}}
+if brew list --versions {{ .name }} | grep -F " {{ .version }}" >/dev/null 2>&1; then
+  brew pin {{ .name }}
+else
+  echo "unix-sync: Homebrew cannot generally restore {{ .name }} {{ .version }}; use a versioned formula or tap" >&2
+  exit 1
+fi
+{{ end -}}
+{{ end -}}
+{{ range (index .packageSpecs "darwinDesktop") -}}
+{{ if eq .version "latest" -}}
+brew install --cask {{ .name }}
+{{ else -}}
+if brew list --cask --versions {{ .name }} | grep -F " {{ .version }}" >/dev/null 2>&1; then
+  brew pin --cask {{ .name }}
+else
+  echo "unix-sync: Homebrew cannot generally restore {{ .name }} {{ .version }}; use a versioned cask or tap" >&2
+  exit 1
+fi
+{{ end -}}
+{{ end -}}
+{{ else if or (eq .osid "linux-centos") (eq .osid "linux-rhel") (eq .osid "linux-rocky") (eq .osid "linux-almalinux") (eq .osid "linux-fedora") -}}
+if command -v dnf >/dev/null 2>&1; then
+  package_manager=dnf
+elif command -v yum >/dev/null 2>&1; then
+  package_manager=yum
+else
+  echo "unix-sync: dnf or yum is required on RHEL-compatible systems" >&2
+  exit 1
+fi
+as_root "$package_manager" install -y epel-release || true
+{{ range (index .packageSpecs "rhel") -}}
+{{ if eq .version "latest" -}}
+as_root "$package_manager" install -y {{ .name }}
+{{ else -}}
+as_root "$package_manager" install -y {{ .name }}-{{ .version }}
+{{ end -}}
+{{ end -}}
+{{ else if or (eq .osid "linux-debian") (eq .osid "linux-ubuntu") -}}
+as_root apt-get update
+{{ range (index .packageSpecs "debian") -}}
+{{ if eq .version "latest" -}}
+as_root apt-get install -y {{ .name }}
+{{ else -}}
+as_root apt-get install -y --allow-downgrades {{ .name }}={{ .version }}
+{{ end -}}
+{{ end -}}
+{{ else -}}
+echo "unix-sync: application distribution is not defined for {{ .osid }}" >&2
+exit 1
+{{ end -}}

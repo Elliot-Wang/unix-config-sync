@@ -1,0 +1,136 @@
+{
+  "schemaVersion": 1,
+  "applications": [
+    {
+      "id": "homebrew",
+      "label": "Homebrew",
+      "description": "package manager for macOS",
+      "kind": "bootstrap",
+      "required": true,
+      "packages": {"darwin": "homebrew"}
+    },
+    {
+      "id": "chezmoi",
+      "label": "chezmoi",
+      "description": "dotfile sync engine",
+      "kind": "bootstrap",
+      "required": true,
+      "packages": {"darwin": "chezmoi", "rhel": "chezmoi", "debian": "chezmoi", "windows": "twpayne.chezmoi"}
+    },
+    {
+      "id": "git",
+      "label": "Git",
+      "description": "version control system",
+      "required": true,
+      "packages": {"darwin": "git", "rhel": "git", "debian": "git", "windows": "Git.Git"}
+    },
+    {
+      "id": "zsh",
+      "label": "Zsh + Oh My Zsh",
+      "description": "interactive shell with plugins",
+      "required": true,
+	  "configPaths": [".zshrc", ".zsh/**"],
+      "packages": {"darwin": "zsh", "rhel": "zsh", "debian": "zsh"}
+    },
+    {
+      "id": "tmux",
+      "label": "tmux",
+      "description": "persistent terminal sessions",
+	  "configPaths": [".tmux.conf"],
+      "packages": {"darwin": "tmux", "rhel": "tmux", "debian": "tmux"}
+    },
+    {
+      "id": "neovim",
+      "label": "Neovim",
+      "description": "modern terminal editor",
+	  "configPaths": [".config/nvim", ".config/nvim/**"],
+      "packages": {"darwin": "neovim", "rhel": "neovim", "debian": "neovim", "windows": "Neovim.Neovim"}
+    },
+    {
+      "id": "vim",
+      "label": "Vim",
+      "description": "classic terminal editor",
+	  "configPaths": [".vimrc", ".vim", ".vim/**"],
+      "packages": {"darwin": "vim", "rhel": "vim-enhanced", "debian": "vim"}
+    },
+    {
+      "id": "ranger",
+      "label": "Ranger",
+      "description": "terminal file manager",
+	  "configPaths": [".config/ranger", ".config/ranger/**"],
+      "packages": {"darwin": "ranger", "rhel": "ranger", "debian": "ranger"}
+    },
+    {
+      "id": "eza",
+      "label": "eza",
+      "description": "alternative to ls",
+      "packages": {"darwin": "eza", "windows": "eza-community.eza"}
+    },
+    {
+      "id": "bat",
+      "label": "bat",
+      "description": "alternative to cat",
+      "packages": {"darwin": "bat", "windows": "sharkdp.bat"}
+    },
+    {
+      "id": "zoxide",
+      "label": "zoxide",
+      "description": "smarter cd command",
+      "packages": {"darwin": "zoxide", "windows": "ajeetdsouza.zoxide"}
+    },
+    {
+      "id": "fzf",
+      "label": "fzf",
+      "description": "interactive fuzzy finder",
+      "packages": {"darwin": "fzf", "debian": "fzf", "windows": "junegunn.fzf"}
+    },
+    {
+      "id": "ripgrep",
+      "label": "ripgrep",
+      "description": "fast recursive text search",
+      "packages": {"darwin": "ripgrep", "debian": "ripgrep", "windows": "BurntSushi.ripgrep.MSVC"}
+    },
+    {
+      "id": "fd",
+      "label": "fd",
+      "description": "alternative to find",
+      "packages": {"darwin": "fd", "debian": "fd-find", "windows": "sharkdp.fd"}
+    },
+    {
+      "id": "fastfetch",
+      "label": "fastfetch",
+      "description": "system information summary",
+      "packages": {"darwin": "fastfetch", "windows": "Fastfetch-cli.Fastfetch"}
+    },
+    {
+      "id": "wezterm",
+      "label": "WezTerm",
+      "description": "GPU-accelerated terminal emulator",
+      "kind": "desktop",
+      "packages": {"darwin": "wezterm", "windows": "wez.wezterm"}
+    }
+  ],
+  "profiles": [
+    {
+      "id": "personal",
+      "label": "Personal workstation",
+      "description": "Interactive workstation with the Modern shell experience.",
+      "shellMode": "modern",
+      "applications": ["tmux", "neovim", "vim", "ranger", "eza", "bat", "zoxide", "fzf", "ripgrep", "fd", "fastfetch"]
+    },
+    {
+      "id": "work",
+      "label": "Workstation",
+      "description": "Work machine with the Modern shell experience.",
+      "shellMode": "modern",
+      "applications": ["tmux", "neovim", "vim", "ranger", "eza", "bat", "zoxide", "fzf", "ripgrep", "fd", "fastfetch"]
+    },
+    {
+      "id": "server",
+      "label": "Server",
+      "description": "Conservative headless environment using Legacy shell behavior.",
+      "shellMode": "legacy",
+      "applications": ["tmux", "neovim", "vim"]
+    }
+  ]
+}

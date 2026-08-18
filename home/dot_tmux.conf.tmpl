@@ -1,0 +1,177 @@
+# ========================================
+# 1. 通用配置
+# ========================================
+
+# 窗口编号从 1 开始，而不是 0，这样按 1-9 更直观
+set -g base-index 1
+set -g pane-base-index 1
+
+# 自动重命名窗口，让标题更具描述性
+set -g automatic-rename on
+
+# 启用鼠标支持 (非常推荐，可以直接点击切换窗格和窗口)
+set -g mouse on
+
+# 降低 Neovim 中 ESC 退出 Insert mode 的等待时间，同时保留 Alt 组合键判断窗口
+set -sg escape-time 10
+
+# 向 Neovim 传递 FocusGained / FocusLost 事件
+set -g focus-events on
+
+# 保留更多历史输出，关闭窗口后自动整理编号
+set -g history-limit 100000
+set -g renumber-windows on
+
+# 当前 session 被销毁时，尝试切换到其他 session，而不是直接 detach
+set -g detach-on-destroy off
+
+# 允许应用通过 OSC 52 同步到 tmux buffer 和系统剪贴板
+set -g set-clipboard on
+set -g allow-passthrough on
+
+# Vim 风格的复制模式
+setw -g mode-keys vi
+
+# 可重复绑定在 600ms 内无需再次按 Prefix
+set -g repeat-time 600
+
+# 终端颜色与真彩支持
+set -g default-terminal "tmux-256color"
+set -as terminal-overrides ",xterm*:Tc"
+set -as terminal-overrides ",*:RGB"
+
+# ========================================
+# 2. Prefix 配置
+# ========================================
+
+# 将默认 Prefix Ctrl+b 解绑，改为 Ctrl+k
+unbind C-b
+set -g prefix C-k
+
+# Prefix 按下后 2 秒内没有后续按键，自动取消 Prefix 状态
+set -g prefix-timeout 2000
+
+# 连续按两次 Ctrl+k，将 Ctrl+k 发送给当前应用
+bind C-k send-prefix
+
+# ========================================
+# 3. 窗格与窗口快捷键
+# ========================================
+
+# 重新加载配置：Prefix + r
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded!"
+
+# 创建窗格并继承当前工作目录
+bind = split-window -h -c "#{pane_current_path}"
+bind - split-window -v -c "#{pane_current_path}"
+
+# 新建窗口时继承当前 pane 的工作目录
+bind n new-window -c "#{pane_current_path}"
+
+# Vim 风格窗格切换，可连续触发
+bind -r h select-pane -L
+bind -r j select-pane -D
+bind -r k select-pane -U
+bind -r l select-pane -R
+
+# Vim 风格窗格大小调整，可连续触发
+bind -r H resize-pane -L 3
+bind -r J resize-pane -D 3
+bind -r K resize-pane -U 3
+bind -r L resize-pane -R 3
+
+# 切换到上一个/下一个窗口，可连续触发
+bind -r [ previous-window
+bind -r ] next-window
+
+# 将当前窗口移动到其他 Session
+bind M run-shell -b "~/.tmux/plugins/tmux-popup-control/main.sh --root-menu window:push-to-session"
+
+# Alt + 数字直接切换窗口，无需 Prefix
+bind-key -n M-1 select-window -t 1
+bind-key -n M-2 select-window -t 2
+bind-key -n M-3 select-window -t 3
+bind-key -n M-4 select-window -t 4
+bind-key -n M-5 select-window -t 5
+bind-key -n M-6 select-window -t 6
+bind-key -n M-7 select-window -t 7
+bind-key -n M-8 select-window -t 8
+bind-key -n M-9 select-window -t 9
+
+# ========================================
+# 4. 复制与剪贴板
+# ========================================
+
+bind v copy-mode
+bind p paste-buffer
+{{ if eq .chezmoi.os "darwin" -}}
+bind t run-shell "pbpaste | tmux load-buffer -w -"
+{{ else if eq .chezmoi.os "linux" -}}
+bind t run-shell "if command -v wl-paste >/dev/null 2>&1; then wl-paste; elif command -v xclip >/dev/null 2>&1; then xclip -selection clipboard -o; fi | tmux load-buffer -w -"
+{{ end -}}
+
+# 在复制模式中使用 v 选择、y 复制
+bind-key -T copy-mode-vi v send-keys -X begin-selection
+bind-key -T copy-mode-vi y send-keys -X copy-selection-and-cancel
+
+# ========================================
+# 5. 状态栏样式 (支持 NerdFont)
+# ========================================
+
+# 状态栏前景颜色
+set -g status-fg "#abb2bf"
+
+# 窗格边框颜色
+set -g pane-border-style fg="#3e4452"
+set -g pane-active-border-style fg="#61afef"
+
+set -g status-interval 5
+set -g status-justify left
+set -g status-bg "#282c34"
+
+# 左侧：显示会话名
+set -g status-left-length 30
+set -g status-left "#[bg=#61afef,fg=#282c34,bold]  #S #[bg=default,fg=#61afef] "
+
+# 右侧：CPU 使用率 + 内存负载 + 时间
+set -g status-right-length 150
+# 这里去掉了网络展示，加入了 CPU () 模块
+set -g status-right "#[fg=#3e4452]#[bg=#3e4452,fg=#abb2bf]  #{sysstat_cpu} #[fg=#98c379]#[bg=#98c379,fg=#282c34,bold]  #{sysstat_mem} #[fg=#e5c07b]#[bg=#e5c07b,fg=#282c34,bold]  %H:%M "
+
+# 窗口标签样式 (保持不变)
+setw -g window-status-format "#[fg=#5c6370] #I:#W "
+setw -g window-status-current-format "#[fg=#c678dd]#[bg=#c678dd,fg=#ffffff,bold]#I:#W#[bg=default,fg=#c678dd]"
+
+# ========================================
+# 6. 插件管理 (TPM)
+# ========================================
+
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'hiroppy/tmux-agent-sidebar'
+set -g @plugin 'samoshkin/tmux-plugin-sysstat'
+set -g @plugin 'omerxx/tmux-floax'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+
+# floax：持久浮动终端
+set -g @floax-bind 'o'
+set -g @floax-width '85%'
+set -g @floax-height '85%'
+set -g @floax-border-color '#61afef'
+set -g @floax-text-color '#abb2bf'
+
+# popup-control：Prefix + Space 打开管理界面
+set -g @tmux-popup-control-launch-key 'Space'
+# 保留 Prefix + H 调整窗格大小，将捕获窗格改为 Prefix + P
+set -g @tmux-popup-control-key-pane-capture 'P'
+
+# sysstat：CPU 和内存展示模板
+set -g @sysstat_cpu_view_tmpl 'CPU: #[fg=#{cpu.color}]#{cpu.pused}#[default]'
+set -g @sysstat_mem_view_tmpl 'MEM: #[fg=#{mem.color}]#{mem.pused}#[default]'
+
+# continuum：启动 tmux 时自动恢复会话
+set -g @continuum-restore 'on'
+
+# 初始化 popup-control 和所有 TPM 插件（必须放在配置末尾）
+run-shell "~/.tmux/plugins/tmux-popup-control/tmux-popup-control install-and-init-plugins"

@@ -1,0 +1,29 @@
+# Legacy machine-local zsh fragments are always outside synchronization.
+**/_*.zsh
+
+{{ if ne .shellMode "modern" }}
+.zsh/alter.zsh
+{{ end }}
+
+{{ range .ignoredApplicationPaths }}
+{{ . }}
+{{ end }}
+
+# Retained as source history; Fastfetch replaces this legacy application.
+.config/neofetch
+.config/neofetch/**
+
+{{ if eq .chezmoi.os "windows" }}
+.zshrc
+.zsh/**
+.tmux.conf
+.vimrc
+run_onchange_before_10-install-packages.sh
+10-install-packages.sh
+20-install-plugin-managers.sh
+{{ else }}
+Documents
+Documents/PowerShell/**
+run_onchange_before_10-install-packages.ps1
+10-install-packages.ps1
+{{ end }}

@@ -1,0 +1,35 @@
+# Managed by unix-sync + chezmoi.
+
+function Enable-UnixSyncProxy {
+    $proxy = "http://localhost:7890"
+    $env:http_proxy = $proxy
+    $env:https_proxy = $proxy
+    $env:HTTP_PROXY = $proxy
+    $env:HTTPS_PROXY = $proxy
+}
+
+function Disable-UnixSyncProxy {
+    Remove-Item Env:http_proxy, Env:https_proxy, Env:HTTP_PROXY, Env:HTTPS_PROXY -ErrorAction SilentlyContinue
+}
+
+Set-Alias -Name pxon -Value Enable-UnixSyncProxy
+Set-Alias -Name pxoff -Value Disable-UnixSyncProxy
+
+{{ if eq .shellMode "modern" -}}
+if (Get-Command nvim -ErrorAction SilentlyContinue) {
+    Set-Alias -Name vim -Value nvim
+}
+
+if (Get-Command bat -ErrorAction SilentlyContinue) {
+    Set-Alias -Name cat -Value bat -Force
+}
+
+if (Get-Command eza -ErrorAction SilentlyContinue) {
+    function global:ll { eza --icons --sort=ext --long --header @args }
+    function global:la { eza --icons --sort=ext --all @args }
+}
+
+if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+    Invoke-Expression (& { (zoxide init powershell | Out-String) })
+}
+{{ end -}}

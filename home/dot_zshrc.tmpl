@@ -1,0 +1,44 @@
+# Managed by unix-sync + chezmoi. Files named _*.zsh remain machine-local.
+fpath=("$HOME/.zsh/completions" $fpath)
+
+if [[ -r "$HOME/.antigen/antigen.zsh" ]]; then
+  source "$HOME/.antigen/antigen.zsh"
+  antigen use oh-my-zsh
+  antigen theme ys
+  antigen bundle wfxr/forgit
+  antigen bundle git
+  antigen bundle pip
+  antigen bundle zsh-users/zsh-syntax-highlighting
+  antigen bundle zsh-users/zsh-autosuggestions
+  antigen apply
+fi
+
+# Load all modules deterministically. Chezmoi never manages _*.zsh files.
+for config_file in "$HOME"/.zsh/*.zsh(N); do
+  source "$config_file"
+done
+
+if [[ "${TERM:-}" == xterm && -e /usr/share/terminfo/x/xterm-256color ]]; then
+  export TERM=xterm-256color
+elif [[ "${TERM:-}" == screen && -e /usr/share/terminfo/s/screen-256color ]]; then
+  export TERM=screen-256color
+elif [[ "${TERM:-}" == tmux && -e /usr/share/terminfo/t/tmux-256color ]]; then
+  export TERM=tmux-256color
+fi
+
+export LANG="${LANG:-en_US.UTF-8}"
+export LC_ALL="${LC_ALL:-en_US.UTF-8}"
+export COLORTERM=truecolor
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#5c5c5c"
+export EDITOR=nvim
+export PATH="$HOME/.local/bin:$PATH"
+
+zstyle ':omz:alpha:lib:git' async-prompt no
+
+if command -v ranger >/dev/null 2>&1; then
+  function ranger() { command ranger "$@"; printf '\e[?25h'; }
+  alias ra=ranger
+fi
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"

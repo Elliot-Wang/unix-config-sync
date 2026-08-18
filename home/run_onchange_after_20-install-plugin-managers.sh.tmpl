@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+{{ if index .applications "zsh" -}}
+if [ ! -f "$HOME/.antigen/antigen.zsh" ]; then
+  mkdir -p "$HOME/.antigen"
+  git clone --depth 1 https://github.com/zsh-users/antigen.git "$HOME/.antigen"
+fi
+{{ end }}
+
+{{ if index .applications "tmux" -}}
+if [ ! -d "$HOME/.tmux/plugins/tpm/.git" ]; then
+  mkdir -p "$HOME/.tmux/plugins"
+  git clone --depth 1 https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
+fi
+{{ end -}}
